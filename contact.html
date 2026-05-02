@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Pathirana Motors Store - Heavy Vehicle Spare Parts</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-red: #E53935;
+            --dark-red: #B71C1C;
+            --quality-yellow: #FFC107;
+            --white: #FFFFFF;
+            --bg-light: #F8FAFC;
+            --text-dark: #1E293B;
+            --footer-bg: #0f172a;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-dark);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Navbar (Preserved) --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary-red);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-red);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 1100;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-dark);
+            margin: 5px;
+            transition: var(--transition-speed);
+        }
+
+        .btn-quote {
+            background: var(--primary-red);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 992px) {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                right: -100%;
+                top: 0;
+                height: 100vh;
+                width: 280px;
+                background: var(--white);
+                flex-direction: column;
+                padding-top: 100px;
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+                transition: 0.5s;
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-flex>.btn-quote {
+                display: none;
+            }
+        }
+
+        /* --- Page Hero --- */
+        .contact-hero {
+            height: 30vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('Pic/contact.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 60px;
+            color: white;
+            text-align: center;
+        }
+
+        .contact-hero h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 4rem;
+            letter-spacing: 2px;
+        }
+
+        /* --- Contact Content Layout --- */
+        .contact-section {
+            padding: 80px 0;
+            background: var(--bg-light);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        /* --- Contact Info Box (EH Auto Style) --- */
+        .info-card {
+            background: var(--quality-yellow);
+            padding: 50px;
+            border-radius: 4px;
+            box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-card h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            color: #000;
+            border-bottom: 3px solid #000;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 25px;
+            color: #000;
+        }
+
+        .info-item i {
+            font-size: 1.5rem;
+            margin-top: 5px;
+        }
+
+        .info-item h4 {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .info-item p {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* --- Inquiry Form --- */
+        .form-card {
+            background: white;
+            padding: 50px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-card h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #f1f5f9;
+            border-radius: 2px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-red);
+            outline: none;
+            background: #fff;
+        }
+
+        textarea.form-control {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .btn-send {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .btn-send:hover {
+            background: var(--dark-red);
+        }
+
+        /* --- Footer (Preserved) --- */
+        .footer {
+            background: var(--footer-bg);
+            color: white;
+            border-top: 6px solid var(--primary-red);
+            overflow: hidden;
+        }
+
+        .footer-flex {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .footer-details {
+            flex: 1;
+            min-width: 320px;
+            padding: 80px 5%;
+        }
+
+        .footer-details h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--primary-red);
+            margin-bottom: 25px;
+        }
+
+        .contact-list {
+            list-style: none;
+        }
+
+        .contact-list li {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #cbd5e1;
+        }
+
+        .contact-list i {
+            color: var(--primary-red);
+            font-size: 1.4rem;
+            width: 25px;
+        }
+
+        .footer-map-container {
+            flex: 1.2;
+            min-width: 450px;
+            position: relative;
+            /* clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%); */
+        }
+
+        .footer-map-container iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            border: 0;
+            filter: grayscale(1) invert(0.92);
+        }
+
+        .copyright {
+            text-align: center;
+            background: #020617;
+            padding: 25px;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 992px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-map-container {
+                clip-path: none;
+                min-width: 100%;
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-flex">
+           <a href="index.html" class="logo">Pathirana<span>Motors</span></a>
+            <button class="hamburger" id="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html" style="color: var(--primary-red);">Contact Us</a></li>
+            </ul>
+            <a href="https://wa.me/94714421360" class="btn-quote">GET QUOTE</a>
+        </div>
+    </nav>
+
+    <section class="contact-hero">
+        <div class="container">
+            <h1>GET IN TOUCH</h1>
+        </div>
+    </section>
+
+    <section class="contact-section">
+        <div class="container contact-grid">
+
+            <div class="info-card">
+                <h2>VISIT OUR HUB</h2>
+
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h4>Address</h4>
+                        <p>No.79, Panchikawatta Road,<br>Colombo 10, Sri Lanka</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <h4>Phone</h4>
+                        <p>+94 71 442 1360<br>+94 70 532 9168</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h4>Email</h4>
+                        <p>PathiranaMotors@gmail.com</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <h4>Business Hours</h4>
+                        <p>Mon - Sat: 8:30 AM - 6:30 PM<br>Sunday: Closed</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2>SEND AN INQUIRY</h2>
+                <form action="#">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control" placeholder="example@gmail.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Part Name / Number</label>
+                        <input type="text" class="form-control" placeholder="e.g. HN JO7E Turbo Charger">
+                    </div>
+                    <div class="form-group">
+                        <label>Your Message</label>
+                        <textarea class="form-control" placeholder="Details about your requirement..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-send">Submit Message</button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <footer id="contact" class="footer">
+        <div class="footer-map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.667001857917!2d79.86236567477039!3d6.930346593069515!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259ed29e43b33%3A0x7fb986054de2181c!2sPathirana%20Motor%20Stores%20Pvt%20Ltd!5e0!3m2!1sen!2slk!4v1777355036056!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        </div>
+        <div class="copyright">&copy; 2025 Pathirana Motors Store (Pvt) Ltd. All Rights Reserved.</div>
+    </footer>
+
+    <script>
+        // Mobile Menu Logic
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+
+</html>

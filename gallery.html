@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Pathirana Motors Store - Industrial Hub in Photos</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-red: #E53935;
+            --dark-red: #B71C1C;
+            --quality-yellow: #FFC107;
+            --white: #FFFFFF;
+            --bg-light: #F8FAFC;
+            --text-dark: #1E293B;
+            --footer-bg: #0f172a;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-dark);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Navbar (Preserved) --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary-red);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-red);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 1100;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-dark);
+            margin: 5px;
+            transition: var(--transition-speed);
+        }
+
+        .btn-quote {
+            background: var(--primary-red);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 992px) {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                right: -100%;
+                top: 0;
+                height: 100vh;
+                width: 280px;
+                background: var(--white);
+                flex-direction: column;
+                padding-top: 100px;
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+                transition: 0.5s;
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-flex>.btn-quote {
+                display: none;
+            }
+        }
+
+        /* --- Gallery Hero --- */
+        .gallery-hero {
+            height: 30vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('Pic/gallery.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 60px;
+            color: white;
+            text-align: center;
+        }
+
+        .gallery-hero h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 4rem;
+            letter-spacing: 2px;
+        }
+
+        /* --- Filter Controls --- */
+        .gallery-filter {
+            padding: 40px 0;
+            background: var(--bg-light);
+            text-align: center;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border: 2px solid #ddd;
+            background: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 5px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            border-color: var(--primary-red);
+            background: var(--primary-red);
+            color: white;
+        }
+
+        /* --- Gallery Grid --- */
+        .gallery-section {
+            padding: 60px 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            height: 280px;
+            background: #eee;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+            filter: brightness(0.7);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            opacity: 0;
+            transition: 0.4s;
+            background: rgba(229, 57, 53, 0.7);
+        }
+
+        .gallery-item:hover.gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            transform: translateY(20px);
+            transition: 0.4s;
+        }
+
+        .gallery-item:hover.gallery-overlay h3 {
+            transform: translateY(0);
+        }
+
+        /* --- Footer (Preserved) --- */
+        .footer {
+            background: var(--footer-bg);
+            color: white;
+            border-top: 6px solid var(--primary-red);
+            overflow: hidden;
+        }
+
+        .footer-flex {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .footer-details {
+            flex: 1;
+            min-width: 320px;
+            padding: 80px 5%;
+        }
+
+        .footer-details h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--primary-red);
+            margin-bottom: 25px;
+        }
+
+        .contact-list {
+            list-style: none;
+        }
+
+        .contact-list li {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #cbd5e1;
+        }
+
+        .contact-list i {
+            color: var(--primary-red);
+            font-size: 1.4rem;
+            width: 25px;
+        }
+
+        .footer-map-container {
+            flex: 1.2;
+            min-width: 450px;
+            position: relative;
+            /* clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%); */
+        }
+
+        .footer-map-container iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            border: 0;
+            filter: grayscale(1) invert(0.92);
+        }
+
+        .copyright {
+            text-align: center;
+            background: #020617;
+            padding: 25px;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-map-container {
+                clip-path: none;
+                min-width: 100%;
+                height: 350px;
+            }
+
+            .gallery-hero h1 {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-flex">
+           <a href="index.html" class="logo">Pathirana<span>Motors</span></a>
+            <button class="hamburger" id="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="gallery.html" style="color: var(--primary-red);">Gallery</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+            <a href="https://wa.me/94714421360" class="btn-quote">GET QUOTE</a>
+        </div>
+    </nav>
+
+    <section class="gallery-hero">
+        <div class="container">
+            <h1>OUR OPERATIONS</h1>
+        </div>
+    </section>
+
+    <section class="gallery-filter">
+        <div class="container">
+            <button class="filter-btn active" data-filter="all">All Photos</button>
+            <button class="filter-btn" data-filter="showroom">Showroom</button>
+            <button class="filter-btn" data-filter="operations">Operations</button>
+        </div>
+    </section>
+
+    <section class="gallery-section">
+        <div class="container gallery-grid">
+
+            <div class="gallery-item" data-category="showroom">
+                <img src="" alt="">
+                <div class="gallery-overlay">
+                    <h3></h3>
+                    <p></p>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="warehouse">
+                <img src="" alt="">
+                <div class="gallery-overlay">
+                    <h3></h3>
+                    <p></p>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="operations">
+                <img src="" alt="">
+                <div class="gallery-overlay">
+                    <h3></h3>
+                    <p></p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer id="contact" class="footer">
+        <div class="footer-flex">
+            <div class="footer-details">
+                <h3><span>Pathirana</span> Motors Store (PVT) LTD</h3>
+                <p>Premier supplier of light and heavy vehicle machinery parts based in Colombo's automotive hub.</p>
+                <ul class="contact-list" style="margin-top: 30px;">
+                    <li><i class="fas fa-map-marker-alt"></i> No.79, Panchikawatta Road, Colombo 10, Sri Lanka</li>
+                    <li><i class="fas fa-phone"></i> +94 71 442 1360 / +94 70 532 9168</li>
+                    <li><i class="fas fa-envelope"></i> PathiranaMotors@gmail.com</li>
+                    <li><i class="fas fa-id-badge"></i> Reg No: PV 00271664</li>
+                    <li><i class="fas fa-clock"></i> Mon - Sat: 8:30 AM - 6:30 PM (Sun: Closed)</li>
+                </ul>
+            </div>
+            <div class="footer-map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.667001857917!2d79.86236567477039!3d6.930346593069515!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259ed29e43b33%3A0x7fb986054de2181c!2sPathirana%20Motor%20Stores%20Pvt%20Ltd!5e0!3m2!1sen!2slk!4v1777355036056!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 Pathirana Motors Store (Pvt) Ltd. All Rights Reserved. Specializing in High-Performance Automotive
+            Components.
+        </div>
+    </footer>
+
+    <script>
+        // 1. Mobile Menu Toggle
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('nav-menu').classList.toggle('active');
+        });
+
+        // 2. Simple Gallery Filtering
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const items = document.querySelectorAll('.gallery-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Active Button styling
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter');
+
+                items.forEach(item => {
+                    if (filter === 'all' |
+
+                        item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

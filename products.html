@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OEM Spare Parts Catalog | Pathirana Motors Store</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-red: #E53935;
+            --dark-red: #B71C1C;
+            --quality-yellow: #FFC107;
+            --white: #FFFFFF;
+            --bg-light: #F8FAFC;
+            --text-dark: #1E293B;
+            --footer-bg: #0f172a;
+            --border-color: #e2e8f0;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-dark);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Navbar (Preserved) --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary-red);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-red);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 1100;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-dark);
+            margin: 5px;
+            transition: var(--transition-speed);
+        }
+
+        .btn-quote {
+            background: var(--primary-red);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 992px) {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                right: -100%;
+                top: 0;
+                height: 100vh;
+                width: 280px;
+                background: var(--white);
+                flex-direction: column;
+                padding-top: 100px;
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+                transition: 0.5s;
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-flex>.btn-quote {
+                display: none;
+            }
+        }
+
+        /* --- Page Hero --- */
+        .page-hero {
+            height: 20vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1586864387917-f729d1c937b0?q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 60px;
+            color: white;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3rem;
+            letter-spacing: 2px;
+        }
+
+        /* --- Search Section --- */
+        .search-section {
+            padding: 25px 0;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 70px;
+            z-index: 950;
+        }
+
+        .search-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 25px;
+            border: 2px solid var(--border-color);
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-red);
+        }
+
+        .search-btn {
+            padding: 0 35px;
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        /* --- Catalog Layout --- */
+        .catalog-section {
+            padding: 40px 0;
+            background: var(--bg-light);
+        }
+
+        .catalog-flex {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        /* --- Industrial Sidebar --- */
+        .sidebar {
+            flex: 0 0 350px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            position: sticky;
+            top: 160px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            background: var(--footer-bg);
+            color: white;
+            padding: 15px 20px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.5rem;
+        }
+
+        .category-menu {
+            list-style: none;
+        }
+
+        .category-item {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .main-cat {
+            width: 100%;
+            padding: 14px 20px;
+            background: white;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            text-align: left;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .main-cat:hover {
+            background: #fdf2f2;
+            color: var(--primary-red);
+        }
+
+        .main-cat.active {
+            color: var(--primary-red);
+            background: #f8fafc;
+        }
+
+        .main-cat i {
+            transition: 0.3s;
+            font-size: 0.7rem;
+        }
+
+        .main-cat.active i {
+            transform: rotate(180deg);
+        }
+
+        .sub-menu {
+            list-style: none;
+            background: #f8fafc;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .sub-menu.open {
+            max-height: 1500px;
+        }
+
+        .sub-menu li a {
+            display: block;
+            padding: 10px 20px 10px 40px;
+            text-decoration: none;
+            color: #555;
+            font-size: 0.75rem;
+            border-left: 3px solid transparent;
+            font-weight: 600;
+        }
+
+        .sub-menu li a:hover {
+            color: var(--primary-red);
+            background: white;
+            border-left-color: var(--primary-red);
+        }
+
+        /* --- Product Grid --- */
+        .product-display {
+            flex: 1;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            transition: 0.3s;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-red);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 180px;
+            background: #f4f4f4;
+        }
+
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .product-info h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .btn-whatsapp {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.8rem;
+            border-radius: 2px;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background: var(--footer-bg);
+            color: white;
+            border-top: 6px solid var(--primary-red);
+            overflow: hidden;
+        }
+
+        .footer-flex {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .footer-details {
+            flex: 1;
+            min-width: 320px;
+            padding: 60px 5%;
+        }
+
+        .footer-details h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.2rem;
+            color: var(--primary-red);
+            margin-bottom: 20px;
+        }
+
+        .contact-list {
+            list-style: none;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+
+        .contact-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .contact-list i {
+            color: var(--primary-red);
+        }
+
+        .footer-map-container {
+            flex: 1.2;
+            min-width: 400px;
+            /* clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);*/
+        }
+
+        .footer-map-container iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            border: 0;
+            filter: grayscale(1) invert(0.92);
+        }
+
+        .copyright {
+            text-align: center;
+            background: #020617;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 992px) {
+            .catalog-flex {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                flex: none;
+                width: 100%;
+                position: static;
+                max-height: none;
+            }
+
+            .footer-map-container {
+                clip-path: none;
+                min-width: 100%;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-flex">
+            <a href="index.html" class="logo">Pathirana<span>Motors</span></a>
+            <button class="hamburger" id="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="products.html" style="color: var(--primary-red);">Products</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+            <a href="https://wa.me/94714421360" class="btn-quote">GET QUOTE</a>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>SUPPLY CATALOG</h1>
+        </div>
+    </section>
+
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <input type="text" class="search-input" id="partsSearch"
+                    placeholder="Search by name, category or code (e.g. 911, Clutch, Gearbox)...">
+                <button class="search-btn"><i class="fas fa-search"></i> SEARCH</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="catalog-section">
+        <div class="container catalog-flex">
+
+            <aside class="sidebar">
+                <div class="sidebar-header">Technical Groups</div>
+                <ul class="category-menu">
+
+                    <li class="category-item">
+                        <button class="main-cat">Engine <i class="fas fa-chevron-down"></i></button>
+                        <ul class="sub-menu">
+                            <li><a href="product.html">20 ENGINE ASSEMBLY</a></li>
+                            <li><a href="product.html">21 ENGINES WITHOUT ATTACHMENTS</a></li>
+                            <li><a href="product.html">22 FUEL EQUIPMENT</a></li>
+                            <li><a href="product.html">23 FUEL, WATER, AIR, OIL, EXHAUST CIRCUITS</a></li>
+                            <li><a href="product.html">26 COMPRESSOR - HYDRAULIC PUMP - VACUUM</a></li>
+                            <li><a href="product.html">27 ENGINE ELECTRICAL EQUIPMENT</a></li>
+                            <li><a href="product.html">29 ACTUATORS AND ENGINE MOUNT</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="category-item">
+                        <button class="main-cat">Frame <i class="fas fa-chevron-down"></i></button>
+                        <ul class="sub-menu">
+                            <li><a href="product.html">10 MARKING - REPAIR MANUALS - TOOL</a></li>
+                            <li><a href="product.html">11 ON-BOARD DOCUMENTATION/SERVICE</a></li>
+                            <li><a href="product.html">12 CHASSIS FRAME</a></li>
+                            <li><a href="product.html">13 SUSPENSION</a></li>
+                            <li><a href="product.html">14 SPARE WHEEL BRACKETS</a></li>
+                            <li><a href="product.html">15 TOWING</a></li>
+                            <li><a href="product.html">16 WINCH - LANDING GEAR</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="category-item">
+                        <button class="main-cat">Transmission <i class="fas fa-chevron-down"></i></button>
+                        <ul class="sub-menu">
+                            <li><a href="product.html">31 CLUTCH</a></li>
+                            <li><a href="product.html">32 GEARBOX</a></li>
+                            <li><a href="product.html">36 POWER TAKE-OFF - TORQUE TAKE-OFF</a></li>
+                            <li><a href="product.html">39 CLUTCH, GEARBOXES AND SUSPENSION</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="category-item">
+                        <button class="main-cat">Axles, Steering <i class="fas fa-chevron-down"></i></button>
+                        <ul class="sub-menu">
+                            <li><a href="product.html">41 STEERING</a></li>
+                            <li><a href="product.html">42 FRONT AXLE</a></li>
+                            <li><a href="product.html">44 REAR AXLE</a></li>
+                            <li><a href="product.html">48 WHEELS - TORQUE CORRECTOR</a></li>
+                            <li><a href="product.html">49 PROPELLER SHAFTS - RETARDER</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="category-item">
+                        <button class="main-cat">Brake System <i class="fas fa-chevron-down"></i></button>
+                        <ul class="sub-menu">
+                            <li><a href="product.html">51 BRAKES</a></li>
+                            <li><a href="product.html">52 ACTUATOR MECHANICAL BRAKES</a></li>
+                            <li><a href="product.html">53 ACTUATOR PNEUMATIC BRAKES</a></li>
+                            <li><a href="product.html">54 PNEUMATIC AUXILIARY EQUIPMENT</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="category-item">
+                        <button class="main-cat">Body <i class="fas fa-chevron-down"></i></button>
+                        <ul class="sub-menu">
+                            <li><a href="product.html">60 CAB-BODY</a></li>
+                            <li><a href="product.html">61 BODY STRUCTURE</a></li>
+                            <li><a href="product.html">62 REMOVABLE BODY PARTS</a></li>
+                            <li><a href="product.html">63 GLASS - MIRRORS - AC - INSULATION</a></li>
+                            <li><a href="product.html">64 INTERNAL EQUIPMENT</a></li>
+                            <li><a href="product.html">65 SEATS - SLEEPING BAG</a></li>
+                            <li><a href="product.html">66 EXTERIOR BODY EQUIPMENT</a></li>
+                            <li><a href="product.html">68 PAINT, PROTECTION, TIGHTNESS</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="category-item">
+                        <button class="main-cat">Electrics <i class="fas fa-chevron-down"></i></button>
+                        <ul class="sub-menu">
+                            <li><a href="product.html">70 LOCATION OF ELECTRICAL APPLIANCES</a></li>
+                            <li><a href="product.html">72 ELECTRIC POWER</a></li>
+                            <li><a href="product.html">73 WORKPLACE</a></li>
+                            <li><a href="product.html">74 EXTERIOR AND INTERIOR LIGHTING</a></li>
+                            <li><a href="product.html">75 ELEMENTS OF VISIBILITY AND COMFORT</a></li>
+                            <li><a href="product.html">78 OTHER ACCESSORIES</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="category-item">
+                        <button class="main-cat">Spare Parts (Fixings) <i class="fas fa-chevron-down"></i></button>
+                        <ul class="sub-menu">
+                            <li><a href="product.html">900 SCREW FOR METALS</a></li>
+                            <li><a href="product.html">901 METAL TUBES</a></li>
+                            <li><a href="product.html">903 STUDS ; RODS ; THREADED RODS</a></li>
+                            <li><a href="product.html">905 METAL SHEET SCREW</a></li>
+                            <li><a href="product.html">911 HEXAGONAL NUTS</a></li>
+                            <li><a href="product.html">913 LOCKABLE NUTS</a></li>
+                            <li><a href="product.html">920 PUCKS</a></li>
+                            <li><a href="product.html">930 CLAMP CLAMPS; BRACKETS</a></li>
+                            <li><a href="product.html">936 PIPES - DURITE TUBES</a></li>
+                            <li><a href="product.html">940 THREADED FITTINGS</a></li>
+                            <li><a href="product.html">943 FUEL FITTING</a></li>
+                            <li><a href="product.html">948 PLUG-IN / SNAP-ON</a></li>
+                            <li><a href="product.html">951 SEALS, STATIC & RUBBER RINGS</a></li>
+                            <li><a href="product.html">960 BALL BEARINGS</a></li>
+                            <li><a href="product.html">971 ELECTRICAL RELAYS</a></li>
+                            <li><a href="product.html">977 LAMPS / BULBS</a></li>
+                            <li><a href="product.html">978 FUSES</a></li>
+                            <li><a href="product.html">980 COTTER PINS</a></li>
+                            <li><a href="product.html">985 GAS SHOCK ABSORBER</a></li>
+                            <li><a href="product.html">986 SPRINGS</a></li>
+                            <li><a href="product.html">990 RIVETS</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </aside>
+
+            <main class="product-display">
+                <div class="product-grid" id="productGrid">
+                    <div class="product-card" data-title="Engine">
+                        <a href="product.html"> <!-- link to your new page -->
+                            <div class="product-img">
+                                <img src="Pic/enn.jpg" alt="Engine">
+                            </div>
+                        </a>
+                        <div class="product-info">
+                            <h3>Engine</h3><a href="https://wa.me/94714421360?text=Inquiry: Engine"
+                                class="btn-whatsapp"><i class="fab fa-whatsapp"></i> INQUIRE</a>
+                        </div>
+                    </div>
+                    <div class="product-card" data-title="Frame">
+                        <a href="product.html">
+                            <div class="product-img"><img src="Pic/frm.jpg"></div>
+                        </a>
+                        <div class="product-info">
+                            <h3>Frame</h3><a href="https://wa.me/94714421360?text=Inquiry: Frame"
+                                class="btn-whatsapp"><i class="fab fa-whatsapp"></i> INQUIRE</a>
+                        </div>
+                    </div>
+                    <div class="product-card" data-title="Transmission">
+                        <a href="product.html">
+                            <div class="product-img"><img src="Pic/trn.jpg" alt="Towing"></div>
+                        </a>
+                        <div class="product-info">
+                            <h3>Transmission</h3><a href="https://wa.me/94714421360?text=Inquiry: Transmission"
+                                class="btn-whatsapp"><i class="fab fa-whatsapp"></i> INQUIRE</a>
+                        </div>
+                    </div>
+                    <div class="product-card" data-title="Axles, Steering">
+                        <a href="product.html">
+                            <div class="product-img"><img src="Pic/axl.jpg" alt="Winch"></div>
+                        </a>
+                        <div class="product-info">
+                            <h3>Axles, Steering</h3><a href="https://wa.me/94714421360?text=Inquiry: Axles, Steering"
+                                class="btn-whatsapp"><i class="fab fa-whatsapp"></i> INQUIRE</a>
+                        </div>
+                    </div>
+
+                    <div class="product-card" data-title="Brake System">
+                        <a href="product.html">
+                            <div class="product-img"><img src="Pic/brk.png" alt="Clutch"></div>
+                        </a>
+                        <div class="product-info">
+                            <h3>Brake System</h3><a href="https://wa.me/94714421360?text=Inquiry: Brake System"
+                                class="btn-whatsapp"><i class="fab fa-whatsapp"></i> INQUIRE</a>
+                        </div>
+                    </div>
+                    <div class="product-card" data-title="Body Parts">
+                        <a href="product.html">
+                            <div class="product-img"><img src="Pic/bd.png" alt="Gearbox"></div>
+                        </a>
+                        <div class="product-info">
+                            <h3>Body Parts</h3><a href="https://wa.me/94714421360?text=Inquiry: Body Parts"
+                                class="btn-whatsapp"><i class="fab fa-whatsapp"></i> INQUIRE</a>
+                        </div>
+                    </div>
+                    <div class="product-card" data-title="Electrics">
+                        <a href="product.html">
+                            <div class="product-img"><img src="Pic/ele.png" alt="PTO"></div>
+                        </a>
+                        <div class="product-info">
+                            <h3>Electrics</h3><a href="https://wa.me/94714421360?text=Inquiry: Electrics"
+                                class="btn-whatsapp"><i class="fab fa-whatsapp"></i> INQUIRE</a>
+                        </div>
+                    </div>
+                    <div class="product-card" data-title="36 POWER TAKE-OFF - Spare Parts">
+                        <a href="product.html">
+                            <div class="product-img"><img src="Pic/spt.jpg" alt="PTO"></div>
+                        </a>
+                        <div class="product-info">
+                            <h3>Spare Parts (Fixings)</h3><a href="https://wa.me/94714421360?text=Inquiry: Spare Parts"
+                                class="btn-whatsapp"><i class="fab fa-whatsapp"></i> INQUIRE</a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+        </div>
+    </section>
+
+    <footer id="contact" class="footer">
+        <div class="footer-flex">
+            <div class="footer-details">
+                <h3><span>Pathirana</span> Motors Store (PVT) LTD</h3>
+                <p>Premier supplier of light and heavy vehicle machinery parts based in Colombo's automotive hub.</p>
+                <ul class="contact-list" style="margin-top: 30px;">
+                    <li><i class="fas fa-map-marker-alt"></i> No.79, Panchikawatta Road, Colombo 10, Sri Lanka</li>
+                    <li><i class="fas fa-phone"></i> +94 71 442 1360 / +94 70 532 9168</li>
+                    <li><i class="fas fa-envelope"></i> PathiranaMotors@gmail.com</li>
+                    <li><i class="fas fa-id-badge"></i> Reg No: PV 00271664</li>
+                    <li><i class="fas fa-clock"></i> Mon - Sat: 8:30 AM - 6:30 PM (Sun: Closed)</li>
+                </ul>
+            </div>
+            <div class="footer-map-container">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.667001857917!2d79.86236567477039!3d6.930346593069515!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259ed29e43b33%3A0x7fb986054de2181c!2sPathirana%20Motor%20Stores%20Pvt%20Ltd!5e0!3m2!1sen!2slk!4v1777355036056!5m2!1sen!2slk"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 Pathirana Motors Store (Pvt) Ltd. All Rights Reserved. Specializing in High-Performance
+            Automotive
+            Components.
+        </div>
+    </footer>
+
+    <script>
+        // 1. Mobile Navbar
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('nav-menu').classList.toggle('active');
+        });
+
+        // 2. Sidebar Accordion
+        const mainCats = document.querySelectorAll('.main-cat');
+        mainCats.forEach(cat => {
+            cat.addEventListener('click', function () {
+                mainCats.forEach(other => {
+                    if (other !== this) {
+                        other.classList.remove('active');
+                        other.nextElementSibling.classList.remove('open');
+                    }
+                });
+                this.classList.toggle('active');
+                this.nextElementSibling.classList.toggle('open');
+            });
+        });
+
+        // 3. Live Search Bar (filters by name or industrial code)
+        const searchInput = document.getElementById('partsSearch');
+        const cards = document.querySelectorAll('.product-card');
+
+        searchInput.addEventListener('keyup', (e) => {
+            const term = e.target.value.toLowerCase();
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title').toLowerCase();
+                if (title.includes(term)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

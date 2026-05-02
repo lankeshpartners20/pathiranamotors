@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Pathirana Motors Store - Heavy Vehicle Specialists</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-red: #E53935;
+            --dark-red: #B71C1C;
+            --quality-yellow: #FFC107;
+            --white: #FFFFFF;
+            --bg-light: #F8FAFC;
+            --text-dark: #1E293B;
+            --footer-bg: #0f172a;
+            --transition-speed: 0.5s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-dark);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Navbar (Preserved from Home) --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary-red);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-red);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 1100;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-dark);
+            margin: 5px;
+            transition: var(--transition-speed);
+        }
+
+        .btn-quote {
+            background: var(--primary-red);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 992px) {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                right: -100%;
+                top: 0;
+                height: 100vh;
+                width: 280px;
+                background: var(--white);
+                flex-direction: column;
+                padding-top: 100px;
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+                transition: 0.5s;
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-flex>.btn-quote {
+                display: none;
+            }
+
+            .nav-menu.btn-quote {
+                display: block;
+                width: 80%;
+                text-align: center;
+                margin-top: 20px;
+            }
+        }
+
+        /* --- Page Hero --- */
+        .about-hero {
+            height: 40vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('Pic/aboutus.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 60px;
+            color: white;
+            text-align: center;
+        }
+
+        .about-hero h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 5rem;
+            letter-spacing: 2px;
+        }
+
+        /* --- Story Section --- */
+        .story-section {
+            padding: 100px 0;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .story-content h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .story-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        .red-accent {
+            color: var(--primary-red);
+            font-weight: 700;
+        }
+
+        .story-img img {
+            width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Mission Section (Overlapping Style) --- */
+        .mission-section {
+            padding: 100px 0;
+            background: var(--bg-light);
+            overflow: hidden;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            align-items: center;
+            position: relative;
+        }
+
+        .mission-image {
+            grid-column: 4 / 13;
+            grid-row: 1;
+            height: 500px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .mission-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .mission-box {
+            grid-column: 1 / 7;
+            grid-row: 1;
+            z-index: 2;
+            background: var(--quality-yellow);
+            padding: 60px;
+            box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .mission-box h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3.5rem;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .mission-box h2 span{
+            color: white;
+        } 
+
+        .mission-box p {
+            color: #000;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* --- Stats Section --- */
+        .stats-bar {
+            background: var(--footer-bg);
+            padding: 60px 0;
+            color: white;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .stat-item h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3.5rem;
+            color: var(--primary-red);
+        }
+
+        .stat-item p {
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* --- Footer (Preserved from Home) --- */
+        .footer {
+            background: var(--footer-bg);
+            color: white;
+            border-top: 6px solid var(--primary-red);
+            overflow: hidden;
+        }
+
+        .footer-flex {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .footer-details {
+            flex: 1;
+            min-width: 320px;
+            padding: 80px 5%;
+        }
+
+        .footer-details h3 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--primary-red);
+            margin-bottom: 25px;
+        }
+
+        .footer-details h3 span{
+            color: white;
+        }
+
+        .contact-list {
+            list-style: none;
+        }
+
+        .contact-list li {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #cbd5e1;
+        }
+
+        .contact-list i {
+            color: var(--primary-red);
+            font-size: 1.4rem;
+            width: 25px;
+        }
+
+        .footer-map-container {
+            flex: 1.2;
+            min-width: 450px;
+            position: relative;
+           /* clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%); */
+        }
+
+        .footer-map-container iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            border: 0;
+            filter: grayscale(1) invert(0.92);
+        }
+
+        .copyright {
+            text-align: center;
+            background: #020617;
+            padding: 25px;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 992px) {
+            .story-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mission-grid {
+                display: flex;
+                flex-direction: column-reverse;
+            }
+
+            .mission-image {
+                width: 100%;
+                height: 300px;
+            }
+
+            .mission-box {
+                width: 90%;
+                margin: -60px auto 0;
+                padding: 40px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-map-container {
+                clip-path: none;
+                min-width: 100%;
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-flex">
+           <a href="index.html" class="logo">Pathirana<span>Motors</span></a>
+            <button class="hamburger" id="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html" style="color: var(--primary-red);">About Us</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+            <a href="https://wa.me/94714421360" class="btn-quote">GET QUOTE</a>
+        </div>
+    </nav>
+
+    <section class="about-hero">
+        <div class="container">
+            <h1>WHO WE ARE</h1>
+            <p style="letter-spacing: 3px; font-weight: 700;">TRUSTED AUTOMOTIVE SOLUTIONS SINCE 2020</p>
+        </div>
+    </section>
+
+    <section class="story-section">
+        <div class="container story-grid">
+            <div class="story-content">
+                <h2>A LEGACY OF <span class="red-accent">RELIABILITY</span></h2>
+                <p>Established in <span class="red-accent">2020</span>, Pathirana Motors Store (Pvt) Ltd has quickly risen to
+                    become a premier supplier of light and heavy vehicle machinery parts in Sri Lanka. Based in the
+                    heart of Colombo's automotive hub, Panchikawatta, we serve as a one-stop center for all your
+                    mechanical needs.</p>
+                <p>We specialize in both new and refurbished high-performance components, ensuring that logistics and
+                    industrial sectors keep moving without delay. Our dedication to precision engineering has made us a
+                    trusted partner for national institutions.</p>
+            </div>
+            <div class="story-img">
+                <img src="Pic/legacy.jpg" alt="Heavy Vehicle Parts">
+            </div>
+        </div>
+    </section>
+
+    <section class="mission-section">
+        <div class="container mission-grid">
+            <div class="mission-box">
+                <h2>OUR <span>MISSION</span></h2>
+                <p>Following the standards of industry leaders like E.H. Auto Supply, we strive to become a market
+                    leader by providing high-quality products with unparalleled customer support.</p>
+                <br>
+                <p>Our commitment is simple: To provide the convenience of shopping under one roof with a
+                    <strong>guaranteed 30-day flexible credit period</strong> for our corporate clients.</p>
+            </div>
+            <div class="mission-image">
+                <img src="Pic/mission.jpg" alt="Precision Engineering">
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-bar">
+        <div class="container stats-grid">
+            <div class="stat-item">
+                <h3>2020</h3>
+                <p>Year Founded</p>
+            </div>
+            <div class="stat-item">
+                <h3>500+</h3>
+                <p>Certified Parts</p>
+            </div>
+            <div class="stat-item">
+                <h3>30 Days</h3>
+                <p>Credit Period</p>
+            </div>
+            <div class="stat-item">
+                <h3>100%</h3>
+                <p>Quality Guaranteed</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="footer">
+        <div class="footer-flex">
+            <div class="footer-details">
+                <h3><span>Pathirana</span> Motors Store (PVT) LTD</h3>
+                <p>Premier supplier of light and heavy vehicle machinery parts based in Colombo's automotive hub.</p>
+                <ul class="contact-list" style="margin-top: 30px;">
+                    <li><i class="fas fa-map-marker-alt"></i> No.79, Panchikawatta Road, Colombo 10, Sri Lanka</li>
+                    <li><i class="fas fa-phone"></i> +94 71 442 1360 / +94 70 532 9168</li>
+                    <li><i class="fas fa-envelope"></i> PathiranaMotors@gmail.com</li>
+                    <li><i class="fas fa-id-badge"></i> Reg No: PV 00271664</li>
+                    <li><i class="fas fa-clock"></i> Mon - Sat: 8:30 AM - 6:30 PM (Sun: Closed)</li>
+                </ul>
+            </div>
+            <div class="footer-map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.667001857917!2d79.86236567477039!3d6.930346593069515!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259ed29e43b33%3A0x7fb986054de2181c!2sPathirana%20Motor%20Stores%20Pvt%20Ltd!5e0!3m2!1sen!2slk!4v1777355036056!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 Pathirana Motors Store (Pvt) Ltd. All Rights Reserved. Specializing in High-Performance Automotive
+            Components.
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Script
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+    </script>
+</body>
+
+</html>

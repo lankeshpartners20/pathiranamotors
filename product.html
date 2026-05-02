@@ -1,0 +1,2392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathirana Parts Explorer</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-red: #E53935;
+            --bg-light: #F8FAFC;
+            --text-dark: #1E293B;
+            --white: #fff;
+        }
+
+        /* RESET */
+        body {
+            margin: 0;
+            font-family: Roboto;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        /* --- Navbar (Preserved) --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary-red);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-red);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 1100;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-dark);
+            margin: 5px;
+            transition: var(--transition-speed);
+        }
+
+        .btn-quote {
+            background: var(--primary-red);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 992px) {
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                right: -100%;
+                top: 0;
+                height: 100vh;
+                width: 280px;
+                background: #fff;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 100px 20px;
+                gap: 20px;
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+                transition: 0.4s ease;
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-menu li {
+                width: 100%;
+            }
+
+            .nav-menu a {
+                display: block;
+                width: 100%;
+                padding: 12px 0;
+                font-size: 1rem;
+            }
+
+            .btn-quote {
+                display: none;
+            }
+        }
+
+        /* HERO */
+        .page-hero {
+            margin-top: 60px;
+            height: 120px;
+            background: #111;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Bebas Neue;
+            font-size: 2rem;
+        }
+
+        /* SEARCH */
+        .search-section {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-container {
+            display: flex;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        .search-btn {
+            background: var(--primary-red);
+            color: #fff;
+            border: none;
+            padding: 12px;
+        }
+
+        /* LAYOUT */
+        .catalog-flex {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: var(--bg-light);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 300px;
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .sidebar-header {
+            background: #111;
+            color: #fff;
+            padding: 15px;
+            font-family: Bebas Neue;
+        }
+
+        .main-cat {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: #fff;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .sub-menu {
+            display: none;
+        }
+
+        .sub-menu a {
+            display: block;
+            padding: 10px 20px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .main-cat.active+.sub-menu {
+            display: block;
+        }
+
+        /* GRID */
+        .product-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        .product-img {
+            height: 180px;
+        }
+
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            text-align: center;
+            padding: 10px;
+            font-family: Bebas Neue;
+        }
+
+        /* PANEL */
+        .detail-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            display: none;
+            z-index: 1000;
+        }
+
+        .detail-panel {
+            position: fixed;
+            right: -550px;
+            top: 0;
+            width: 350px;
+            height: 100%;
+            background: #fff;
+            padding: 25px;
+            transition: .3s;
+            z-index: 1100;
+            overflow-y: auto;
+        }
+
+        .detail-panel {
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+
+        .detail-panel.active {
+            right: 0;
+        }
+
+        .slider {
+            position: relative;
+            height: 220px;
+            /* reduce from 250px */
+            max-height: 40vh;
+            /* responsive limit */
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* IMPORTANT: prevents cutting + overflow */
+            background: #f5f5f5;
+        }
+
+        #title {
+            margin-top: 15px;
+            font-size: 1.5rem;
+        }
+
+        #desc {
+            margin-top: 10px;
+            line-height: 1.5;
+            white-space: pre-line;
+            /* keeps your line breaks */
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #000;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .prev {
+            left: 0;
+        }
+
+        .next {
+            right: 0;
+        }
+
+        .panel-whatsapp {
+            display: block;
+            background: #25D366;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            margin-top: 150px;
+            text-decoration: none;
+        }
+
+        /* CLOSE BUTTON */
+        .close-btn {
+            position: absolute;
+            top: 2px;
+            right: 15px;
+            font-size: 28px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* MOBILE PANEL */
+        @media (max-width: 768px) {
+            .detail-panel {
+                width: 100%;
+                right: -100%;
+                padding: 20px 15px;
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
+            }
+
+            .detail-panel.active {
+                right: 0;
+            }
+
+            .slider {
+                height: 200px;
+                margin-top: 10px;
+            }
+
+            #title {
+                font-size: 1.4rem;
+                margin-top: 10px;
+            }
+
+            #desc {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+
+            .panel-whatsapp {
+                font-size: 1rem;
+                padding: 14px;
+                border-radius: 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container nav-flex">
+            <a href="index.html" class="logo">Pathirana<span>Motors</span></a>
+            <button class="hamburger" id="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="products.html" style="color: var(--primary-red);">Products</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+            <a href="https://wa.me/94714421360" class="btn-quote">GET QUOTE</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="page-hero">INDUSTRIAL PARTS EXPLORER</section>
+
+    <!-- SEARCH -->
+    <section class="search-section">
+        <div class="search-container">
+            <input id="search" class="search-input" placeholder="Search code or name...">
+            <button class="search-btn">Search</button>
+        </div>
+    </section>
+
+    <!-- MAIN -->
+    <section class="catalog-flex">
+
+        <div class="sidebar">
+            <div class="sidebar-header">Technical Index</div>
+            <div id="menu"></div>
+        </div>
+
+        <div class="product-grid" id="grid"></div>
+
+    </section>
+
+    <!-- PANEL -->
+    <div class="detail-overlay" id="overlay"></div>
+
+    <div class="detail-panel" id="panel">
+        <button class="close-btn" id="closePanel">&times;</button>
+        <div class="slider">
+            <span class="arrow prev" onclick="changeSlide(-1)">‹</span>
+            <span class="arrow next" onclick="changeSlide(1)">›</span>
+            <div id="slides"></div>
+        </div>
+
+        <h2 id="title"></h2>
+        <p id="desc"></p>
+        <a id="wa" class="panel-whatsapp">WhatsApp Inquiry</a>
+    </div>
+
+    <script>
+
+        const hamburger = document.getElementById("hamburger");
+        const navMenu = document.getElementById("nav-menu");
+
+        // MENU TOGGLE
+        hamburger.onclick = () => {
+            navMenu.classList.toggle("active");
+        };
+
+        // CLOSE MENU ON LINK CLICK
+        document.querySelectorAll(".nav-menu a").forEach(link => {
+            link.onclick = () => {
+                navMenu.classList.remove("active");
+            };
+        });
+
+        // CLOSE MENU ON OUTSIDE CLICK
+        document.addEventListener("click", (e) => {
+            if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                navMenu.classList.remove("active");
+            }
+        });
+
+
+        /* =======================
+           PRODUCT DATA
+        ======================= */
+        const catalog = {
+            ENGINE: {
+
+                "ENGINE ASSEMBLY": [
+                    {
+                        code: "Z1728",
+                        name: "Engine - 10103",
+                        details: "Complete engine assembly unit.",
+                        images: ["Pic/10103_1.jpg", "Pic/10103_2.jpg"]
+                    },
+                    {
+                        code: "97503",
+                        name: "Cylinder Head Cover - 11023",
+                        details: "Protective cover for cylinder head.",
+                        images: ["Pic/11023_1.jpg", "Pic/11023_2.jpg"]
+                    },
+                    {
+                        code: "97706",
+                        name: "Flywheel - 12310",
+                        details: "Stores rotational energy and stabilizes engine operation.",
+                        images: ["Pic/12310_1.jpg", "Pic/12310_2.jpg"]
+                    },
+                    {
+                        code: "97006",
+                        name: "Ring Gear - 12312",
+                        details: "Gear attached to flywheel for starter engagement.",
+                        images: ["Pic/12312_1.jpg", "Pic/12312_2.jpg"]
+                    }
+                ],
+
+                "ENGINES WITHOUT ATTACHMENTS": [
+                    {
+                        code: "41010",
+                        name: "Piston - 12011",
+                        details: "Moves inside the cylinder to compress air-fuel mixture and transfer combustion force.",
+                        images: ["Pic/41010_1.jpg", "Pic/41010_2.jpg"]
+                    },
+                    {
+                        code: "41020",
+                        name: "Piston Ring - 12032",
+                        details: "Seals the gap between piston and cylinder wall, controlling compression and oil flow.",
+                        images: ["Pic/41020_1.jpg", "Pic/41020_2.jpg"]
+                    },
+                    {
+                        code: "97011",
+                        name: "Valve Seat - Inlet - 13214",
+                        details: "Seat for intake valve sealing.",
+                        images: ["Pic/13214_1.jpg", "Pic/13214_2.jpg"]
+                    },
+                    {
+                        code: "97062",
+                        name: "Valve Seat - Exhaust - 13215",
+                        details: "Seat for exhaust valve sealing.",
+                        images: ["Pic/13215_1.jpg", "Pic/13215_2.jpg"]
+                    },
+                    {
+                        code: "97061",
+                        name: "Exhaust Valve - 13202",
+                        details: "Controls exhaust gas release.",
+                        images: ["Pic/13202_1.jpg", "Pic/13202_2.jpg"]
+                    },
+                    {
+                        code: "99013",
+                        name: "Connecting Rod Assembly - 14516",
+                        details: "Connects piston to crankshaft.",
+                        images: ["Pic/14516_1.jpg", "Pic/14516_2.jpg"]
+                    },
+                    {
+                        code: "41030",
+                        name: "Sleeve",
+                        details: "Cylinder liner that provides a wear-resistant surface for piston movement.",
+                        images: ["Pic/41030_1.jpg", "Pic/41030_2.jpg"]
+                    },
+                    {
+                        code: "41040",
+                        name: "Gudgeon Pin Bush",
+                        details: "Bushing that supports the piston pin connection to the connecting rod.",
+                        images: ["Pic/41040_1.jpg", "Pic/41040_2.jpg"]
+                    },
+                    {
+                        code: "41050",
+                        name: "Main Bearing",
+                        details: "Supports the crankshaft and allows smooth rotation inside the engine block.",
+                        images: ["Pic/41050_1.jpg", "Pic/41050_2.jpg"]
+                    },
+                    {
+                        code: "41060",
+                        name: "Big End Bearing",
+                        details: "Located in the connecting rod, supports crankshaft journal movement.",
+                        images: ["Pic/41060_1.jpg", "Pic/41060_2.jpg"]
+                    },
+                    {
+                        code: "41070",
+                        name: "Thrust Bearing",
+                        details: "Controls axial movement of the crankshaft.",
+                        images: ["Pic/41070_1.jpg", "Pic/41070_2.jpg"]
+                    },
+                    {
+                        code: "41080",
+                        name: "Cam Bush",
+                        details: "Supports camshaft rotation and reduces friction in timing system.",
+                        images: ["Pic/41080_2.jpg", "Pic/41080_1.jpg"]
+                    },
+                    {
+                        code: "41090",
+                        name: "Camshaft Pin Bush",
+                        details: "Bushing used for camshaft alignment and smooth rotation.",
+                        images: ["Pic/41090_1.jpg", "Pic/41090_2.jpg"]
+                    },
+                    {
+                        code: "41100",
+                        name: "Connecting Rod",
+                        details: "Links piston to crankshaft and converts linear motion to rotation.",
+                        images: ["Pic/41100_1.jpg", "Pic/41100_2.jpg"]
+                    },
+                    {
+                        code: "41110",
+                        name: "Head Gasket",
+                        details: "Seals the cylinder head and engine block to prevent leakage.",
+                        images: ["Pic/41110_1.jpg", "Pic/41110_2.jpg"]
+                    },
+                    {
+                        code: "41130",
+                        name: "Oil Seal",
+                        details: "Prevents oil leakage between rotating and stationary parts.",
+                        images: ["Pic/41130_1.jpg"]
+                    },
+                    {
+                        code: "41140",
+                        name: "Water Pump",
+                        details: "Circulates coolant through engine and radiator system.",
+                        images: ["Pic/41140_1.png", "Pic/41140_2.png"]
+                    },
+                    {
+                        code: "41150",
+                        name: "Oil Pump",
+                        details: "Pumps oil through engine lubrication system for smooth operation.",
+                        images: ["Pic/41150_1.jpg", "Pic/41150_2.jpg"]
+                    },
+                    {
+                        code: "21095",
+                        name: "Engine Seal Kits",
+                        details: "Complete set of seals used to prevent oil, coolant, and gas leaks within the engine.",
+                        images: ["Pic/21095_1.jpg", "Pic/21095_2.jpg"]
+                    },
+                    {
+                        code: "21110",
+                        name: "Cylinder Block",
+                        details: "Main structural body of the engine that houses cylinders and internal components.",
+                        images: ["Pic/21110_1.jpg", "Pic/21110_2.jpg"]
+                    },
+                    {
+                        code: "21130",
+                        name: "Flywheel Crankcase, Rear Cross Member",
+                        details: "Supports the flywheel and provides structural stability to the rear engine section.",
+                        images: ["Pic/21130_1.jpg", "Pic/21130_2.jpg"]
+                    },
+                    {
+                        code: "21150",
+                        name: "Lower Crankcase",
+                        details: "Lower section of the engine block enclosing the crankshaft and lubricating oil.",
+                        images: ["Pic/21150_4.jpg", "Pic/21150_3.jpg"]
+                    },
+
+                    {
+                        code: "21210",
+                        name: "Crankshaft, Liners, Connecting Rods",
+                        details: "Core rotating assembly that converts piston motion into rotational power.",
+                        images: ["Pic/21210_1.jpg", "Pic/21210_2.jpg"]
+                    },
+                    {
+                        code: "21220",
+                        name: "Flywheel, Support Bearing",
+                        details: "Stores rotational energy and ensures smooth engine operation.",
+                        images: ["Pic/21220_1.jpg"]
+                    },
+                    {
+                        code: "21230",
+                        name: "Damper, Pulley, Capstan",
+                        details: "Reduces engine vibration and drives auxiliary components via belt systems.",
+                        images: ["Pic/21230_1.jpg"]
+                    },
+                    {
+                        code: "21240",
+                        name: "Liners, Pistons, Piston Rings",
+                        details: "Essential combustion components that seal, compress, and transfer energy.",
+                        images: ["Pic/21150_1.jpg", "Pic/21150_2.jpg"]
+                    },
+
+                    {
+                        code: "21310",
+                        name: "Cylinder Head, Gaskets, Valve Cover",
+                        details: "Seals the combustion chamber and houses valves and spark/injector systems.",
+                        images: ["Pic/21310_1.jpg", "Pic/21310_2.jpg"]
+                    },
+                    {
+                        code: "21320",
+                        name: "Valves, Rocker Arms, Rocker Arms Axle",
+                        details: "Controls airflow into and out of the engine cylinders.",
+                        images: ["Pic/21320_1.jpg"]
+                    },
+                    {
+                        code: "21330",
+                        name: "Camshaft, Rods, Tappets",
+                        details: "Operates valves in synchronization with engine timing.",
+                        images: ["Pic/21330_1.jpg"]
+                    },
+                    {
+                        code: "21340",
+                        name: "Timing Drive",
+                        details: "Ensures proper timing between crankshaft and camshaft.",
+                        images: ["Pic/21340_1.jpg", "Pic/21340_2.jpg"]
+                    },
+
+                    {
+                        code: "21410",
+                        name: "Intake Manifold",
+                        details: "Distributes air evenly to all cylinders for combustion.",
+                        images: ["Pic/21410_1.jpg", "Pic/21410_2.jpg"]
+                    },
+                    // {
+                    //     code: "21420",
+                    //     name: "Turbocharger + Grease",
+                    //     details: "Boosts engine power by forcing more air into the combustion chamber.",
+                    //     images: ["Pic/21420_1.jpg", "Pic/21420_2.jpg"]
+                    // },
+                    // {
+                    //     code: "21430",
+                    //     name: "Exhaust Manifold",
+                    //     details: "Collects exhaust gases from cylinders and directs them to the exhaust system.",
+                    //     images: ["Pic/21430_1.jpg", "Pic/21430_2.jpg"]
+                    // },
+                    // {
+                    //     code: "21440",
+                    //     name: "Breather, Gas Recirculation",
+                    //     details: "Manages crankcase ventilation and reduces emissions.",
+                    //     images: ["Pic/21440_1.jpg", "Pic/21440_2.jpg"]
+                    // },
+
+                    // {
+                    //     code: "21510",
+                    //     name: "Water Pump and Detailing",
+                    //     details: "Circulates coolant to maintain optimal engine temperature.",
+                    //     images: ["Pic/21510_1.jpg", "Pic/21510_2.jpg"]
+                    // },
+                    // {
+                    //     code: "21520",
+                    //     name: "Cylinder Head Piping, Thermostat",
+                    //     details: "Controls coolant flow and engine temperature regulation.",
+                    //     images: ["Pic/21520_1.jpg", "Pic/21520_2.jpg"]
+                    // },
+                    // {
+                    //     code: "21530",
+                    //     name: "Piping on Unit, Heat Exchanger",
+                    //     details: "Transfers heat from engine fluids to maintain efficiency.",
+                    //     images: ["Pic/21530_1.jpg", "Pic/21530_2.jpg"]
+                    // },
+                    // {
+                    //     code: "21531",
+                    //     name: "Heat Exchanger Detailing",
+                    //     details: "Detailed components of the heat exchanger system.",
+                    //     images: ["Pic/21531_1.jpg", "Pic/21531_2.jpg"]
+                    // },
+
+                    // {
+                    //     code: "21610",
+                    //     name: "Belts",
+                    //     details: "Transmit power from engine to auxiliary components.",
+                    //     images: ["Pic/21610_1.jpg", "Pic/21610_2.jpg"]
+                    // },
+                    // {
+                    //     code: "21620",
+                    //     name: "Belt Idler Pulleys",
+                    //     details: "Maintains belt tension and alignment.",
+                    //     images: ["Pic/21620_1.jpg", "Pic/21620_2.jpg"]
+                    // },
+
+                    // {
+                    //     code: "21910",
+                    //     name: "Oil Pump and Drive",
+                    //     details: "Circulates oil to lubricate engine components.",
+                    //     images: ["Pic/21910_1.jpg", "Pic/21910_2.jpg"]
+                    // },
+                    // {
+                    //     code: "21920",
+                    //     name: "Internal Pipeline, Oil Intake",
+                    //     details: "Supplies oil internally from sump to engine components.",
+                    //     images: ["Pic/21920_1.jpg", "Pic/21920_2.jpg"]
+                    // },
+                    // {
+                    //     code: "21930",
+                    //     name: "Oil Filter, Centrifuge",
+                    //     details: "Removes contaminants from engine oil for smooth operation.",
+                    //     images: ["Pic/21930_1.jpg", "Pic/21930_2.jpg"]
+                    // },
+                    // {
+                    //     code: "21940",
+                    //     name: "Outward Piping, Oil Dipstick",
+                    //     details: "External oil flow system with dipstick for level measurement.",
+                    //     images: ["Pic/21940_1.jpg", "Pic/21940_2.jpg"]
+                    // }
+
+
+                ],
+
+                "FUEL EQUIPMENT": [
+                    {
+                        code: "97018",
+                        name: "Nozzle - 16620",
+                        details: "Injects fuel into combustion chamber.",
+                        images: ["Pic/16620_1.jpg", "Pic/16620_2.jpg"]
+                    },
+                    {
+                        code: "97013",
+                        name: "Feed Pump - 16640",
+                        details: "Supplies fuel to injection system.",
+                        images: ["Pic/16640_1.jpg", "Pic/16640_2.jpg"]
+                    },
+                    {
+                        code: "22110",
+                        name: "T.N.V.D., Fasteners, Lubricants",
+                        details: "Includes fuel system mounting components, fastening elements, and lubrication materials.",
+                        images: ["Pic/22110_1.jpg"]
+                    },
+                    {
+                        code: "22132",
+                        name: "Electronic Fuel Injection Equipment",
+                        details: "Controls precise fuel delivery electronically for improved efficiency and performance.",
+                        images: ["Pic/22132_1.jpg", "Pic/22132_2.jpg"]
+                    },
+                    {
+                        code: "22140",
+                        name: "Low Pressure Separate Pump",
+                        details: "Supplies fuel from the tank to the high-pressure injection system.",
+                        images: ["Pic/22140_1.jpg", "Pic/22140_2.jpg"]
+                    },
+
+                    {
+                        code: "22210",
+                        name: "Spray Nozzles",
+                        details: "Atomizes fuel into fine mist for efficient combustion inside the engine.",
+                        images: ["Pic/22210_1.jpg"]
+                    },
+                    {
+                        code: "22220",
+                        name: "Injector Tubes",
+                        details: "Transports fuel from injectors to the combustion chamber.",
+                        images: ["Pic/22220_1.jpg"]
+                    },
+
+                    {
+                        code: "22410",
+                        name: "Filter & Tubing",
+                        details: "Ensures clean fuel flow through filtration and delivery pipelines.",
+                        images: ["Pic/22410_1.jpg"]
+                    },
+                    {
+                        code: "22411",
+                        name: "Fuel Filter Detailing",
+                        details: "Detailed components and parts of the fuel filtration system.",
+                        images: ["Pic/22411_1.jpg"]
+                    }
+                ],
+
+                "FUEL, WATER, AIR, OIL, EXHAUST CIRCUITS": [
+                    {
+                        code: "99385",
+                        name: "Oil Filter - 15274",
+                        details: "Filters engine oil contaminants.",
+                        images: ["Pic/15274_2.jpg"]
+                    },
+                    {
+                        code: "99288",
+                        name: "Oil Filter - 15274",
+                        details: "Secondary oil filter variation.",
+                        images: ["Pic/15274_1.jpg"]
+                    },
+                    {
+                        code: "97071",
+                        name: "Fuel Filter - 16400",
+                        details: "Removes impurities from fuel.",
+                        images: ["Pic/16400_1.jpg"]
+                    },
+                    {
+                        code: "97402",
+                        name: "Water Pump - 21010",
+                        details: "Circulates coolant through engine.",
+                        images: ["Pic/21010_1.jpg"]
+                    },
+                    {
+                        code: "97002",
+                        name: "Cooling Fan - 21060",
+                        details: "Provides airflow for cooling.",
+                        images: ["Pic/21060_1.jpg"]
+                    },
+                    {
+                        code: "97017",
+                        name: "Thermostat - 21200",
+                        details: "Regulates engine temperature.",
+                        images: ["Pic/21200_1.jpg"]
+                    },
+                    {
+                        code: "97000",
+                        name: "Rubber Ring - 21007",
+                        details: "Sealing component in fluid systems.",
+                        images: ["Pic/21007_1.jpg", "Pic/21007_2.jpg"]
+                    },
+                    {
+                        code: "23110",
+                        name: "Pipelines, Coarse Filter Cleaning of Heating",
+                        details: "Fuel heating pipelines with coarse filtration for removing large contaminants.",
+                        images: ["Pic/23110_1.jpg"]
+                    },
+                    {
+                        code: "23111",
+                        name: "Coarse Filter Fuel Cleaning - Detailing",
+                        details: "Detailed components of the coarse fuel filtration system.",
+                        images: ["Pic/23111_1.jpg"]
+                    }
+                    // {
+                    //     code: "23121",
+                    //     name: "Fuel Tank and Protection",
+                    //     details: "Stores fuel safely with protective housing against external damage.",
+                    //     images: ["Pic/23121_1.jpg", "Pic/23121_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23123",
+                    //     name: "Fuel Tank Fasteners",
+                    //     details: "Mounting and securing components for the fuel tank.",
+                    //     images: ["Pic/23123_1.jpg", "Pic/23123_2.jpg"]
+                    // },
+
+                    // {
+                    //     code: "23210",
+                    //     name: "Fan",
+                    //     details: "Provides airflow for cooling the engine and radiator system.",
+                    //     images: ["Pic/23210_1.jpg", "Pic/23210_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23220",
+                    //     name: "Meshes, Screens, Air Intake",
+                    //     details: "Protects air intake system by filtering debris and particles.",
+                    //     images: ["Pic/23220_1.jpg", "Pic/23220_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23230",
+                    //     name: "Radiator, Diffuser and Fasteners",
+                    //     details: "Main cooling unit with airflow control and mounting components.",
+                    //     images: ["Pic/23230_1.jpg", "Pic/23230_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23233",
+                    //     name: "Radiator Protection",
+                    //     details: "Protective covers and guards for radiator safety.",
+                    //     images: ["Pic/23233_1.jpg", "Pic/23233_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23241",
+                    //     name: "Water Circuit Engine/Radiator",
+                    //     details: "Circulates coolant between engine and radiator for temperature control.",
+                    //     images: ["Pic/23241_1.jpg", "Pic/23241_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23242",
+                    //     name: "Expansion Tank Water Circuit",
+                    //     details: "Manages coolant expansion and pressure within the system.",
+                    //     images: ["Pic/23242_1.jpg", "Pic/23242_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23250",
+                    //     name: "Expansion Tank and Fasteners",
+                    //     details: "Coolant reservoir with mounting hardware.",
+                    //     images: ["Pic/23250_1.jpg", "Pic/23250_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23262",
+                    //     name: "Urea Water Tank Piping",
+                    //     details: "Piping system for urea solution used in emission control.",
+                    //     images: ["Pic/23262_1.jpg", "Pic/23262_2.jpg"]
+                    // },
+
+                    // {
+                    //     code: "23310",
+                    //     name: "Engine to Air Filter Connections",
+                    //     details: "Connects engine intake system to air filter assembly.",
+                    //     images: ["Pic/23310_1.jpg", "Pic/23310_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23313",
+                    //     name: "Intercooler - Pipelines",
+                    //     details: "Piping system that cools compressed air before entering engine.",
+                    //     images: ["Pic/23313_1.jpg", "Pic/23313_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23316",
+                    //     name: "Compressor Suction Pipe",
+                    //     details: "Supplies air to the compressor unit.",
+                    //     images: ["Pic/23316_1.jpg", "Pic/23316_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23320",
+                    //     name: "Air Filter - Fasteners",
+                    //     details: "Mounting components for securing air filter assembly.",
+                    //     images: ["Pic/23320_1.jpg", "Pic/23320_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23321",
+                    //     name: "Air Filter Detailing",
+                    //     details: "Detailed components of the air filtration system.",
+                    //     images: ["Pic/23321_1.jpg", "Pic/23321_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23330",
+                    //     name: "Air Filter Intake Duct",
+                    //     details: "Channels air into the filter for engine intake.",
+                    //     images: ["Pic/23330_1.jpg", "Pic/23330_2.jpg"]
+                    // },
+
+                    // {
+                    //     code: "23410",
+                    //     name: "Mining Brake and Control",
+                    //     details: "Engine braking and control components used in heavy-duty applications.",
+                    //     images: ["Pic/23410_1.jpg", "Pic/23410_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23420",
+                    //     name: "Pipes from Engine to Muffler",
+                    //     details: "Directs exhaust gases from engine to muffler system.",
+                    //     images: ["Pic/23420_1.jpg", "Pic/23420_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23430",
+                    //     name: "Muffler and Fasteners",
+                    //     details: "Reduces exhaust noise with mounting components.",
+                    //     images: ["Pic/23430_1.jpg", "Pic/23430_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23440",
+                    //     name: "Pipe Outlet Muffler",
+                    //     details: "Final exhaust outlet directing gases out of the system.",
+                    //     images: ["Pic/23440_1.jpg", "Pic/23440_2.jpg"]
+                    // },
+
+                    // {
+                    //     code: "23510",
+                    //     name: "Piping - Fasteners",
+                    //     details: "General fastening components for various piping systems.",
+                    //     images: ["Pic/23510_1.jpg", "Pic/23510_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23531",
+                    //     name: "Urea Tank Fastener",
+                    //     details: "Mounting components for urea tank system.",
+                    //     images: ["Pic/23531_1.jpg", "Pic/23531_2.jpg"]
+                    // },
+
+                    // {
+                    //     code: "23911",
+                    //     name: "Oil Filler Neck",
+                    //     details: "Entry point for adding engine oil.",
+                    //     images: ["Pic/23911_1.jpg", "Pic/23911_2.jpg"]
+                    // },
+                    // {
+                    //     code: "23912",
+                    //     name: "Oil Dipstick on the Frame",
+                    //     details: "Measures engine oil level externally on the frame.",
+                    //     images: ["Pic/23912_1.jpg", "Pic/23912_2.jpg"]
+                    // }
+                ],
+
+                "COMPRESSOR - HYDRAULIC PUMP - VACUUM": [
+                    {
+                        code: "97101",
+                        name: "Air Compressor Assembly - 14501",
+                        details: "Generates compressed air for systems.",
+                        images: ["Pic/14501_1.jpg", "Pic/14501_2.jpg"]
+                    },
+                    {
+                        code: "99015",
+                        name: "Compressor Piston - 14528",
+                        details: "Piston inside air compressor.",
+                        images: ["Pic/14528_1.jpg"]
+                    },
+                    {
+                        code: "99012",
+                        name: "Compressor Ring Set - 14529",
+                        details: "Sealing rings for compressor piston.",
+                        images: ["Pic/14529_1.jpg", "Pic/14529_2.jpg"]
+                    },
+                    {
+                        code: "99019",
+                        name: "Compressor Cylinder Liner - 14535",
+                        details: "Cylinder sleeve for compressor.",
+                        images: ["Pic/14535_1.jpg"]
+                    },
+                    {
+                        code: "99129",
+                        name: "Valve Kit - Suction - 14570",
+                        details: "Controls air intake in compressor.",
+                        images: ["Pic/14570_1.jpg"]
+                    },
+                    {
+                        code: "99208",
+                        name: "Compressor Cylinder Head - 14540",
+                        details: "Top section of compressor cylinder.",
+                        images: ["Pic/14540_1.jpg"]
+                    },
+                    {
+                        code: "99003",
+                        name: "Valve Kit - Delivery - 14569",
+                        details: "Controls compressed air output.",
+                        images: ["Pic/14569_1.jpg"]
+                    },
+                    {
+                        code: "97312",
+                        name: "Hydraulic Pump - 14670",
+                        details: "Generates hydraulic pressure.",
+                        images: ["Pic/14670_1.jpg"]
+                    },
+                    {
+                        code: "99100",
+                        name: "Cartridge Assembly - 14714",
+                        details: "Internal pump component assembly.",
+                        images: ["Pic/14714_1.jpg"]
+                    }
+                ],
+
+                "ENGINE ELECTRICAL EQUIPMENT": [
+                    {
+                        code: "Z5664",
+                        name: "Generator - 23100",
+                        details: "Produces electrical power.",
+                        images: ["Pic/23100_1.jpg"]
+                    },
+                    {
+                        code: "97505",
+                        name: "Starter Motor - 23300",
+                        details: "Starts engine by cranking.",
+                        images: ["Pic/23300_1.jpg"]
+                    },
+                    {
+                        code: "99216",
+                        name: "Armature - 23310",
+                        details: "Rotating component in starter motor.",
+                        images: ["Pic/23310_1.jpg"]
+                    },
+                    {
+                        code: "99214",
+                        name: "Pinion Assembly - 23313",
+                        details: "Engages starter with flywheel.",
+                        images: ["Pic/23313_1.jpg"]
+                    }
+                ],
+
+                "ACTUATORS AND ENGINE MOUNT": [
+                    {
+                        code: "96001",
+                        name: "Air Compressor - 27630",
+                        details: "Auxiliary air compressor unit.",
+                        images: ["Pic/27630_1.jpg", "Pic/27630_2.jpg"]
+                    },
+                    {
+                        code: "29910",
+                        name: "Engine Mount",
+                        details: "Rubber and metal mounting component that secures the engine to the chassis while reducing vibration, noise, and shock transfer.",
+                        images: ["Pic/29910_2.jpg", "Pic/29910_1.jpg"]
+                    }
+                ]
+            },
+
+            FRAME: {
+
+                "MARKING - REPAIR MANUALS - TOOL": [
+                    // {
+                    //     code: "10000",
+                    //     name: "Note Codes",
+                    //     details: "General reference codes used for identification and catalog organization.",
+                    //     images: ["Pic/10000_1.jpg", "Pic/10000_2.jpg"]
+                    // },
+                    // {
+                    //     code: "10001",
+                    //     name: "Marking, Identification, Signage Plates",
+                    //     details: "Plates and labels used for marking, identification, and technical signage on equipment.",
+                    //     images: ["Pic/10001_1.jpg", "Pic/10001_2.jpg"]
+                    // },
+                    // {
+                    //     code: "10320",
+                    //     name: "Repair Manuals & Tools",
+                    //     details: "Documentation and tools required for maintenance, repair, and servicing operations.",
+                    //     images: ["Pic/10320_1.jpg", "Pic/10320_2.jpg"]
+                    // }
+                ],
+
+                "ON-BOARD DOCUMENTATION/COMMERCIAL/SERVICE": [
+
+                    {
+                        code: "64010",
+                        name: "Air Filter",
+                        details: "Filters incoming air to protect engine from dust and debris.",
+                        images: ["Pic/61010_1.jpg", "Pic/61010_2.jpg"]
+                    },
+                    {
+                        code: "64020",
+                        name: "Fuel Filter",
+                        details: "Removes impurities from fuel before reaching engine.",
+                        images: ["Pic/64020_1.jpg", "Pic/64020_2.jpg"]
+                    }
+                    // {
+                    //     code: "11112",
+                    //     name: "Spare Parts Documentation",
+                    //     details: "Technical documentation and references for spare parts identification and ordering.",
+                    //     images: ["Pic/11112_1.jpg", "Pic/11112_2.jpg"]
+                    // },
+                    // {
+                    //     code: "11211",
+                    //     name: "Onboard Documentation",
+                    //     details: "Operational and technical documents available onboard for maintenance and reference.",
+                    //     images: ["Pic/11211_1.jpg", "Pic/11211_2.jpg"]
+                    // }
+                ],
+
+                "CHASSIS FRAME": [
+                    {
+                        code: "61010",
+                        name: "Chassis Mount",
+                        details: "Mounting component securing engine to chassis while reducing vibration.",
+                        images: ["Pic/61010_3.jpg", "Pic/61010_4.jpg"]
+                    },
+                    {
+                        code: "61020",
+                        name: "Fuel Tank",
+                        details: "Storage tank for vehicle fuel mounted on chassis.",
+                        images: ["Pic/61020_1.jpg", "Pic/61020_2.jpg"]
+                    },
+                    {
+                        code: "61030",
+                        name: "Radiator Assembly",
+                        details: "Cooling unit mounted to chassis for engine temperature control.",
+                        images: ["Pic/61030_1.jpg", "Pic/61030_2.jpg"]
+                    },
+                    {
+                        code: "61040",
+                        name: "Oil Cooler",
+                        details: "Helps maintain engine oil temperature within safe limits.",
+                        images: ["Pic/61040_1.jpg", "Pic/61040_2.jpg"]
+                    },
+                    {
+                        code: "61050",
+                        name: "Cab Tilt & Repair Kit",
+                        details: "Mechanism and repair components for tilting the vehicle cab.",
+                        images: ["Pic/61050_1.jpg", "Pic/61050_2.jpg"]
+                    }
+
+                ],
+
+                "SUSPENSION": [
+                    {
+                        code: "62010",
+                        name: "Leaf Spring - 55121",
+                        details: "Main suspension component supporting vehicle load.",
+                        images: ["Pic/62010_1.jpg", "Pic/62010_2.jpg"]
+                    },
+                    {
+                        code: "62020",
+                        name: "Thrust Washer - 55512",
+                        details: "Supports axial load in suspension and rotating parts.",
+                        images: ["Pic/62020_1.jpg", "Pic/62020_2.jpg"]
+                    },
+                    {
+                        code: "62030",
+                        name: "Bushings - 55523",
+                        details: "Rubber/metal components reducing vibration in suspension joints.",
+                        images: ["Pic/62030_1.jpg", "Pic/62030_2.jpg"]
+                    },
+                    {
+                        code: "62040",
+                        name: "Shock Absorber - 56101",
+                        details: "Dampens suspension movement for smoother ride.",
+                        images: ["Pic/62040_1.jpg", "Pic/62040_2.jpg"]
+                    },
+                    {
+                        code: "62050",
+                        name: "Cab Shock Absorber - 56100",
+                        details: "Shock absorber specifically for cabin suspension.",
+                        images: ["Pic/62050_1.jpg", "Pic/62050_2.jpg"]
+                    },
+                    {
+                        code: "62060",
+                        name: "Cab Spring - 95246",
+                        details: "Spring supporting cabin suspension system.",
+                        images: ["Pic/62060_2.jpg", "Pic/62060_1.jpg"]
+                    }
+                ],
+
+                "SPARE WHEEL BRACKETS": [
+                    // {
+                    //     code: "14110",
+                    //     name: "A.K.B. Box",
+                    //     details: "Electrical/control box unit used for system distribution and protection.",
+                    //     images: ["Pic/14110_1.jpg", "Pic/14110_2.jpg"]
+                    // },
+                    // {
+                    //     code: "14210",
+                    //     name: "Wheel Stand + Fasteners",
+                    //     details: "Support stand and fastening components used for wheel and axle maintenance.",
+                    //     images: ["Pic/14210_1.jpg", "Pic/14210_2.jpg"]
+                    // },
+                    // {
+                    //     code: "14310",
+                    //     name: "Travel Kit, Tool",
+                    //     details: "Portable tool kit used for maintenance, repair, and emergency service operations.",
+                    //     images: ["Pic/14310_1.jpg", "Pic/14310_2.jpg"]
+                    // }
+                ],
+
+                "TOWING": [
+                    // {
+                    //     code: "15110",
+                    //     name: "Front Towing, Hooks, Trailed Earring",
+                    //     details: "Front towing hooks and attachment points used for vehicle recovery and pulling operations.",
+                    //     images: ["Pic/15110_1.jpg", "Pic/15110_2.jpg"]
+                    // },
+                    // {
+                    //     code: "15210",
+                    //     name: "Rear Towing Device, Hook, Trailed With",
+                    //     details: "Rear towing assembly used for pulling, recovery, and trailer connection.",
+                    //     images: ["Pic/15210_1.jpg", "Pic/15210_2.jpg"]
+                    // },
+                    // {
+                    //     code: "15310",
+                    //     name: "Hitch and Fasteners",
+                    //     details: "Towing hitch system with mounting and fastening components for trailer connection.",
+                    //     images: ["Pic/15310_1.jpg", "Pic/15310_2.jpg"]
+                    // },
+                    // {
+                    //     code: "15320",
+                    //     name: "Hitch Mounting Plate",
+                    //     details: "Structural plate used to securely mount the towing hitch to the chassis.",
+                    //     images: ["Pic/15320_1.jpg", "Pic/15320_2.jpg"]
+                    // }
+                ],
+
+                "WINCH - LANDING GEAR": [
+
+                    {
+                        code: "65010",
+                        name: "Universal Cross",
+                        details: "Universal joint component allowing rotational movement between shafts.",
+                        images: ["Pic/65010_1.jpg", "Pic/65010_2.jpg"]
+                    }
+                    // {
+                    //     code: "16110",
+                    //     name: "Pull Winch and Fasteners",
+                    //     details: "Main winch unit used for pulling operations, including mounting and fastening components.",
+                    //     images: ["Pic/16110_1.jpg", "Pic/16110_2.jpg"]
+                    // },
+                    // {
+                    //     code: "16111",
+                    //     name: "Winch Detailing",
+                    //     details: "Detailed internal and external components of the winch system.",
+                    //     images: ["Pic/16111_1.jpg", "Pic/16111_2.jpg"]
+                    // },
+                    // {
+                    //     code: "16130",
+                    //     name: "Winch Hydraulic Drive Equipment",
+                    //     details: "Hydraulic drive system that powers the winch mechanism.",
+                    //     images: ["Pic/16130_1.jpg", "Pic/16130_2.jpg"]
+                    // },
+                    // {
+                    //     code: "16140",
+                    //     name: "Hoses Hydraulic Drive Winches",
+                    //     details: "Hydraulic hoses used to transfer fluid power to winch drive system.",
+                    //     images: ["Pic/16140_1.jpg", "Pic/16140_2.jpg"]
+                    // }
+
+                ],
+
+                "DRIVELINE COMPONENTS": [
+                    {
+                        code: "63010",
+                        name: "Centre Bearing Assembly",
+                        details: "Supports propeller shaft and reduces vibration.",
+                        images: ["Pic/63010_1.jpg", "Pic/63010_2.jpg"]
+                    },
+                    {
+                        code: "63030",
+                        name: "Coupler Assembly - 51100",
+                        details: "Connects transmission components for power transfer.",
+                        images: ["Pic/63040_1.jpg", "Pic/63040_2.jpg"]
+                    },
+                    {
+                        code: "63040",
+                        name: "U-Bolt Cross - 54219",
+                        details: "Fastening component used in suspension and axle mounting.",
+                        images: ["Pic/63040_3.jpg", "Pic/63040_4.jpg"]
+                    }
+                ]
+            },
+
+            TRANSMISSION: {
+
+                "CLUTCH SYSTEM": [
+                    {
+                        code: "90072",
+                        name: "Disk Assy - 30100",
+                        details: "Main clutch disk assembly for power engagement.",
+                        images: ["Pic/30100_1.jpg", "Pic/30100_2.jpg"]
+                    },
+                    {
+                        code: "99228",
+                        name: "Lever Kit - 30221",
+                        details: "Clutch lever repair or replacement kit.",
+                        images: ["Pic/30221_1.jpg"]
+                    },
+                    {
+                        code: "90107",
+                        name: "Sleeve - Release - 30501",
+                        details: "Clutch release sleeve component.",
+                        images: ["Pic/30501_1.jpg"]
+                    },
+                    {
+                        code: "90273",
+                        name: "Booster Assy - 30705",
+                        details: "Clutch booster assembly to reduce pedal effort.",
+                        images: ["Pic/30705_1.jpg"]
+                    },
+                    {
+                        code: "99386",
+                        name: "Booster R/Kit - 30900",
+                        details: "Repair kit for the clutch booster assembly.",
+                        images: ["Pic/30900_1.jpg"]
+                    },
+                    {
+                        code: "TBD-CLU-013",
+                        name: "Clutch Plate",
+                        details: "Friction plate for the clutch system.",
+                        images: ["Pic/ClutchPlate_1.jpg"]
+                    },
+                    {
+                        code: "TBD-CLU-014",
+                        name: "Pressure Plate",
+                        details: "Clutch pressure plate assembly.",
+                        images: ["Pic/PressurePlate_1.jpg"]
+                    },
+                    {
+                        code: "TBD-CLU-015",
+                        name: "Release Bearing",
+                        details: "Bearing used to engage/disengage the clutch.",
+                        images: ["Pic/ReleaseBearing_1.jpg"]
+                    }
+                ],
+
+                "GEARBOX": [
+                    {
+                        code: "91525",
+                        name: "Gear Transmission R/Kit - 32001",
+                        details: "Repair kit for the gear transmission system.",
+                        images: ["Pic/32001_1.jpg"]
+                    },
+                    {
+                        code: "90019",
+                        name: "Oil Pump - 32640",
+                        details: "Lubrication pump for the gearbox/transmission.",
+                        images: ["Pic/32640_1.jpg"]
+                    },
+                    {
+                        code: "90079",
+                        name: "Power Shift - 32172",
+                        details: "Component for the power shift transmission system.",
+                        images: ["Pic/32172_1.jpg"]
+                    },
+                    {
+                        code: "90317",
+                        name: "Hand Brake - 36109",
+                        details: "Mechanical hand brake component.",
+                        images: ["Pic/36109_1.jpg"]
+                    },
+                    {
+                        code: "90327",
+                        name: "U-Cross - 37125",
+                        details: "Universal joint cross for the drivetrain.",
+                        images: ["Pic/37125_1.jpg"]
+                    },
+                    {
+                        code: "95203",
+                        name: "Propeller Shaft Assy - 37610",
+                        details: "Main drive shaft assembly.",
+                        images: ["Pic/37610_1.jpg"]
+                    }
+                ],
+
+                "POWER TAKE-OFF - TORQUE TAKE-OFF": [
+                    {
+                        code: "90707",
+                        name: "P.T.O. Pump - 33300",
+                        details: "Power Take-Off pump for auxiliary equipment.",
+                        images: ["Pic/33300_1.jpg"]
+                    }
+                ]
+
+                // "CLUTCH, GEARBOXES AND SUSPENSION": [
+                //     {
+                //         code: "39120",
+                //         name: "P.G.U. Clutch - Contour",
+                //         details: "Pneumatic or control unit clutch system used for gear engagement control.",
+                //         images: ["Pic/39120_1.jpg", "Pic/39120_2.jpg"]
+                //     },
+                //     {
+                //         code: "39211",
+                //         name: "Gear Shift - Cab",
+                //         details: "Gear shifting mechanism operated from inside the vehicle cabin.",
+                //         images: ["Pic/39211_1.jpg", "Pic/39211_2.jpg"]
+                //     },
+                //     {
+                //         code: "39212",
+                //         name: "Gearshift - Chassis",
+                //         details: "External chassis-mounted gear shifting linkage system.",
+                //         images: ["Pic/39212_1.jpg", "Pic/39212_2.jpg"]
+                //     },
+                //     {
+                //         code: "39215",
+                //         name: "Gearshift Diagram",
+                //         details: "Schematic representation of gear shifting mechanism layout.",
+                //         images: ["Pic/39215_1.jpg", "Pic/39215_2.jpg"]
+                //     },
+                //     {
+                //         code: "39910",
+                //         name: "Gearbox Suspension",
+                //         details: "Support system that holds and stabilizes the gearbox assembly.",
+                //         images: ["Pic/39910_1.jpg", "Pic/39910_2.jpg"]
+                //     }
+                // ]
+            },
+
+            "AXLES, STEERING": {
+
+                "STEERING": [
+                    {
+                        code: "90377",
+                        name: "Tie Rod Assy - 48561",
+                        details: "Steering linkage assembly for wheel alignment and control.",
+                        images: ["Pic/48561_1.jpg"]
+                    },
+                    {
+                        code: "90218",
+                        name: "Tie Rod - End Assy - 48570",
+                        details: "End connection for the tie rod steering assembly.",
+                        images: ["Pic/48570_1.jpg"]
+                    }
+                ],
+
+                "FRONT AXLE": [
+
+                    {
+                        code: "90875",
+                        name: "Brake Front - 41000",
+                        details: "Front axle braking mechanism.",
+                        images: ["Pic/41000_F.jpg"]
+                    },
+                    {
+                        code: "90104",
+                        name: "Chamber - 41320",
+                        details: "Front brake air chamber.",
+                        images: ["Pic/41320_1.jpg"]
+                    },
+                    {
+                        code: "91026",
+                        name: "King Pin Kit - 40025",
+                        details: "Pivot pin for the steering wheel hub on the front axle.",
+                        images: ["Pic/40025_1.jpg"]
+                    },
+                    {
+                        code: "90219",
+                        name: "Front Hub - 40203",
+                        details: "Hub assembly for the front wheel attachment.",
+                        images: ["Pic/40203_1.jpg"]
+                    }
+                ],
+
+                "REAR AXLE": [
+                    {
+                        code: "93075",
+                        name: "Final Assy - 38300",
+                        details: "Main differential/final drive assembly.",
+                        images: ["Pic/38300_1.jpg"]
+                    },
+                    {
+                        code: "90601",
+                        name: "Brake Rear - 41000",
+                        details: "Rear axle braking assembly.",
+                        images: ["Pic/41000_R.jpg"]
+                    },
+                    {
+                        code: "90900",
+                        name: "Brake Shoe Assy - 41030",
+                        details: "Brake shoe set for the rear axle.",
+                        images: ["Pic/41030_3.jpg"]
+                    },
+                    {
+                        code: "90826",
+                        name: "Lining Set - 41039",
+                        details: "Brake lining replacement set.",
+                        images: ["Pic/41039_1.jpg"]
+                    },
+                    {
+                        code: "90105",
+                        name: "Brake Chamber R/Kit - 41320",
+                        details: "Repair kit for the rear brake chamber.",
+                        images: ["Pic/41320_R.jpg"]
+                    },
+                    {
+                        code: "90163",
+                        name: "Slack Adjuster - 41028",
+                        details: "Adjuster for brake shoe clearance.",
+                        images: ["Pic/41028_1.jpg"]
+                    },
+                    {
+                        code: "90964",
+                        name: "Gear Set Drive - 38110",
+                        details: "Drive gear set for the rear differential.",
+                        images: ["Pic/38110_1.jpg"]
+                    },
+                    {
+                        code: "90017",
+                        name: "Gear Pinion - 38423",
+                        details: "Differential pinion gear.",
+                        images: ["Pic/38423_1.jpg"]
+                    },
+                    {
+                        code: "90007",
+                        name: "Thrust Washer - 38424",
+                        details: "Washer for gear spacing and thrust management.",
+                        images: ["Pic/38424_1.jpg"]
+                    }
+                ],
+
+                "WHEELS - TORQUE CORRECTOR": [
+                    {
+                        code: "90204",
+                        name: "Brake Drum - 40206",
+                        details: "Standard wheel brake drum.",
+                        images: ["Pic/40206_1.jpg"]
+                    },
+                    {
+                        code: "20000",
+                        name: "Wheel Assy - 40305",
+                        details: "Complete wheel assembly unit.",
+                        images: ["Pic/40305_1.jpg"]
+                    },
+                    {
+                        code: "22017",
+                        name: "Disk Assy - 40300",
+                        details: "Wheel disk component.",
+                        images: ["Pic/40300_1.jpg"]
+                    },
+                    {
+                        code: "91127",
+                        name: "Hub Bolt Kit - 43210",
+                        details: "Set of bolts for mounting the wheel hub.",
+                        images: ["Pic/43210_1.jpg"]
+                    },
+                    {
+                        code: "25000",
+                        name: "Oil Seal - 40390",
+                        details: "Wheel hub oil seal.",
+                        images: ["Pic/4090_1.jpg"]
+                    },
+                    {
+                        code: "90010",
+                        name: "Bearing - 38325",
+                        details: "Hub or differential bearing.",
+                        images: ["Pic/38325_1.jpg"]
+                    }
+                ],
+
+                "PROPELLER SHAFTS - RETARDER": [
+                    {
+                        code: "00200",
+                        name: "Oil Seal - 38212",
+                        details: "Drivetrain input/output oil seal.",
+                        images: ["Pic/38212_1.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Retainer Seal - 43224",
+                        details: "Seal retainer for the shaft assembly.",
+                        images: ["Pic/43224_1.jpg"]
+                    },
+                    {
+                        code: "90276",
+                        name: "Slack Adjuster - 44320",
+                        details: "Auxiliary slack adjuster (common in retarder-equipped systems).",
+                        images: ["Pic/44320_1.jpg"]
+                    }
+                ]
+            },
+
+            "BRAKE SYSTEM": {
+
+                "BRAKES": [
+                    {
+                        code: "45180",
+                        name: "Brake Valve Assembly",
+                        details: "Main brake control valve used to regulate braking pressure.",
+                        images: ["Pic/45180_1.jpg", "Pic/45180_2.jpg"]
+                    },
+                    {
+                        code: "51010",
+                        name: "Foot Valve",
+                        details: "Primary brake control valve operated by the driver to regulate air pressure to the braking system.",
+                        images: ["Pic/51010_1.jpg", "Pic/51010_2.jpg"]
+                    }
+                ],
+
+                "ACTUATOR MECHANICAL BRAKES": [
+                    // {
+                    //     code: "41002",
+                    //     name: "Gearbox",
+                    //     details: "Controls speed and torque.",
+                    //     images: ["https://source.unsplash.com/600x400/?gearbox"]
+                    // }
+                ],
+
+                "ACTUATOR PNEUMATIC BRAKES": [
+                    {
+                        code: "45180",
+                        name: "Valve Assembly - 45180",
+                        details: "Pneumatic valve controlling brake air pressure.",
+                        images: ["Pic/45180_3.jpg", "Pic/45180_4.jpg"]
+                    },
+                    {
+                        code: "45384",
+                        name: "Valve Assembly - 45184",
+                        details: "Air brake valve used in pneumatic braking systems.",
+                        images: ["Pic/45184_1.jpg", "Pic/45184_2.jpg"]
+                    },
+                    {
+                        code: "45285",
+                        name: "Relay Valve - 45184",
+                        details: "Speeds up air pressure delivery to brake chambers.",
+                        images: ["Pic/45184_3.jpg", "Pic/45184_4.jpg"]
+                    },
+                    {
+                        code: "45421",
+                        name: "Valve Component - 45201",
+                        details: "Additional pneumatic valve component in brake system.",
+                        images: ["Pic/45201_1.jpg"]
+                    },
+                    {
+                        code: "45759",
+                        name: "Valve Component - 45289",
+                        details: "Air system valve used in brake control.",
+                        images: ["Pic/45289_1.jpg"]
+                    },
+                    {
+                        code: "51210",
+                        name: "Air Brake Relay Valve",
+                        details: "Controls and distributes compressed air quickly to brake chambers for faster braking response.",
+                        images: ["Pic/51210_1.jpg", "Pic/51210_2.jpg"]
+                    },
+                    {
+                        code: "51220",
+                        name: "Air Brake Booster",
+                        details: "Amplifies braking force using compressed air for improved braking efficiency.",
+                        images: ["Pic/51220_1.jpg", "Pic/51220_2.jpg"]
+                    },
+                    {
+                        code: "51230",
+                        name: "Air Control Valve",
+                        details: "Regulates airflow and pressure within the pneumatic braking system.",
+                        images: ["Pic/51230_1.jpg", "Pic/51230_2.jpg"]
+                    }
+                ],
+
+                "PNEUMATIC AUXILIARY EQUIPMENT": [
+                    {
+                        code: "47500",
+                        name: "Air Dryer- 47500",
+                        details: "Removes moisture from compressed air in brake system.",
+                        images: ["Pic/47500_1.jpg", "Pic/47500_2.jpg"]
+                    },
+                    {
+                        code: "47500",
+                        name: "Air Filter - 47500",
+                        details: "Filters compressed air before entering brake components.",
+                        images: ["Pic/47500_3.jpg"]
+                    },
+                    {
+                        code: "47540",
+                        name: "Governor Assembly - 47540",
+                        details: "Controls air compressor operation and pressure limits.",
+                        images: ["Pic/47540_1.jpg", "Pic/47540_2.jpg"]
+                    },
+                    {
+                        code: "51320",
+                        name: "Air Booster Repair Kit",
+                        details: "Maintenance kit containing seals and parts for repairing air brake booster.",
+                        images: ["Pic/51320_1.jpg", "Pic/51320_2.jpg"]
+                    },
+                    {
+                        code: "51330",
+                        name: "Air Dryer Repair Kit",
+                        details: "Service kit used for maintaining and repairing air dryer units.",
+                        images: ["Pic/51330_1.jpg", "Pic/51330_2.jpg"]
+                    }
+                ]
+            },
+
+            "BODY PARTS": {
+
+                "CAB-BODY": [
+                    // {
+                    //     code: "42002",
+                    //     name: "Clutch Kit",
+                    //     details: "Power transfer system.",
+                    //     images: ["https://source.unsplash.com/600x400/?clutch"]
+                    // }
+                ],
+
+                "BODY STRUCTURE": [
+                    // {
+                    //     code: "42001",
+                    //     name: "Gearbox",
+                    //     details: "Controls speed and torque.",
+                    //     images: ["https://source.unsplash.com/600x400/?gearbox"]
+                    // }
+                ],
+
+                "REMOVABLE BODY PARTS": [
+                    {
+                        code: "00201",
+                        name: "Wiper Motor Assembly - 28810",
+                        details: "Drives windshield wipers.",
+                        images: ["Pic/28810_1.jpg"]
+                    },
+                    {
+                        code: "00201",
+                        name: "Wiper Link Assembly - 28840",
+                        details: "Links motor to wiper arms.",
+                        images: ["Pic/28840_1.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Wiper Blade Assembly - 28865",
+                        details: "Cleans windshield.",
+                        images: ["Pic/28865_1.jpg"]
+                    },
+                    {
+                        code: "00213",
+                        name: "Wiper Tank Assembly - 28910",
+                        details: "Stores washer fluid.",
+                        images: ["Pic/28910_1.jpg"]
+                    },
+                    {
+                        code: "00209",
+                        name: "Step Cover Assembly - 96124",
+                        details: "Protective step cover.",
+                        images: ["Pic/96124_1.jpg"]
+                    },
+                    {
+                        code: "00205",
+                        name: "Step - 96111",
+                        details: "Cab entry step.",
+                        images: ["Pic/96111_1.jpg"]
+                    }
+                ],
+
+                "GLASS - MIRRORS - AC - INSULATION": [
+                    {
+                        code: "29000",
+                        name: "Blower Assembly - 27218",
+                        details: "Air circulation unit.",
+                        images: ["Pic/27218_1.jpg"]
+                    },
+                    {
+                        code: "00204",
+                        name: "Condenser Assembly - 92100",
+                        details: "AC condenser unit.",
+                        images: ["Pic/92100_1.jpg"]
+                    },
+                    {
+                        code: "29014",
+                        name: "Evaporator Assembly - 27612",
+                        details: "AC cooling unit.",
+                        images: ["Pic/27612_1.jpg"]
+                    },
+                    {
+                        code: "29002",
+                        name: "Motor - 92122",
+                        details: "AC blower motor.",
+                        images: ["Pic/92122_1.jpg"]
+                    },
+                    {
+                        code: "29004",
+                        name: "Fan - 92110",
+                        details: "Cooling fan.",
+                        images: ["Pic/92110_1.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Front Glass - 72712",
+                        details: "Windshield glass.",
+                        images: ["Pic/72712_1.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Weather Strip - 72710",
+                        details: "Sealing rubber strip.",
+                        images: ["Pic/72710_1.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Belt Assembly - 76920",
+                        details: "Cab sealing belt.",
+                        images: ["Pic/76920_1.jpg"]
+                    },
+                    {
+                        code: "29008",
+                        name: "Shock Absorber (Cab) - 86006",
+                        details: "Cab suspension shock absorber.",
+                        images: ["Pic/86006_1.jpg"]
+                    },
+                    {
+                        code: "25102",
+                        name: "Mirror Assembly Rear - 96301",
+                        details: "Rear view mirror.",
+                        images: ["Pic/96301_1.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Mirror Assembly Under - 96350",
+                        details: "Lower mirror unit.",
+                        images: ["Pic/96350_1.jpg"]
+                    }
+                ],
+
+                "INTERNAL EQUIPMENT": [
+                    {
+                        code: "25001",
+                        name: "Accelerator Pedal - 18013",
+                        details: "Driver control pedal.",
+                        images: ["Pic/18013_2.jpg"]
+                    },
+                    {
+                        code: "00201",
+                        name: "Accelerator Wire - 18190",
+                        details: "Connects pedal to throttle.",
+                        images: ["Pic/18190_3.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Wire Assembly - 18450",
+                        details: "Electrical wiring harness.",
+                        images: ["Pic/18450_1.jpg"]
+                    },
+                    {
+                        code: "00216",
+                        name: "Tachograph Unit - 25096",
+                        details: "Monitoring device.",
+                        images: ["Pic/25096_2.jpg"]
+                    },
+                    {
+                        code: "29018",
+                        name: "Gauge Assembly - 25035",
+                        details: "Instrument cluster.",
+                        images: ["Pic/25035_1.jpg"]
+                    },
+                    {
+                        code: "90077",
+                        name: "Gear Control Assembly - 25097",
+                        details: "Gear control linkage.",
+                        images: ["Pic/25097_1.jpg"]
+                    },
+                    {
+                        code: "00201",
+                        name: "Starter Switch Set - 25114",
+                        details: "Engine start switch.",
+                        images: ["Pic/25114_1.jpg"]
+                    },
+                    {
+                        code: "00201",
+                        name: "Fog Switch Assembly - 25370",
+                        details: "Controls fog lights.",
+                        images: ["Pic/25370_1.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Buzzer Assembly - 25570",
+                        details: "Warning sound device.",
+                        images: ["Pic/25570_1.jpg"]
+                    },
+                    {
+                        code: "00201",
+                        name: "Accelter Cable - 18190",
+                        details: "Mechanical linkage for throttle control within the cab.",
+                        images: ["Pic/18190_1.jpg"]
+                    },
+                    {
+                        code: "25001",
+                        name: "Pedal Accel - 18013",
+                        details: "Accelerator pedal assembly for the driver footwell.",
+                        images: ["Pic/18013_1.jpg"]
+                    },
+                    {
+                        code: "00216",
+                        name: "Techograph Assy - 25096",
+                        details: "Cab-mounted recording instrument for speed/time.",
+                        images: ["Pic/25096_1.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Speedometer Assy - 25013",
+                        details: "Dashboard speedometer unit.",
+                        images: ["Pic/25013_1.jpg"]
+                    },
+                    {
+                        code: "02Z17",
+                        name: "Meter Assy - 24810",
+                        details: "Main instrument cluster assembly.",
+                        images: ["Pic/24810_1.jpg"]
+                    },
+                    {
+                        code: "90013",
+                        name: "Coupling - 25098",
+                        details: "Instrument coupling component.",
+                        images: ["Pic/25098_1.jpg"]
+                    },
+                    {
+                        code: "Z4017",
+                        name: "Cable Assy - 25057",
+                        details: "Instrument drive or data cable.",
+                        images: ["Pic/25057_1.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Parking Switch Assembly - 25312",
+                        details: "Switch for parking control.",
+                        images: ["Pic/25312_1.jpg"]
+                    },
+                    {
+                        code: "00262",
+                        name: "Hand Brake Wire Assembly - 36150",
+                        details: "Cable for hand brake operation.",
+                        images: ["Pic/36150_1.jpg"]
+                    },
+                    {
+                        code: "00206",
+                        name: "Switch Assembly - 25320",
+                        details: "General purpose control switch.",
+                        images: ["Pic/25320_1.jpg"]
+                    },
+                    {
+                        code: "30200",
+                        name: "Horn Assembly - 26310",
+                        details: "Vehicle horn unit.",
+                        images: ["Pic/26310_1.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Clutch Assembly - 46801",
+                        details: "Driver clutch control.",
+                        images: ["Pic/46801_1.jpg"]
+                    }
+                ],
+
+                "SEATS - SLEEPING BAG": [
+                    // {
+                    //     code: "41004",
+                    //     name: "PTO Unit",
+                    //     details: "Transfers engine power to equipment.",
+                    //     images: ["https://source.unsplash.com/600x400/?machine"]
+                    // }
+                ],
+
+                "EXTERIOR BODY EQUIPMENT": [
+                    {
+                        code: "00216",
+                        name: "Head Lamp Assembly RH - 26010",
+                        details: "Right headlamp.",
+                        images: ["Pic/26010_1.jpg"]
+                    },
+                    {
+                        code: "00216",
+                        name: "Head Lamp Assembly LH - 26015",
+                        details: "Left headlamp.",
+                        images: ["Pic/26015_1.jpg"]
+                    },
+                    {
+                        code: "00200",
+                        name: "Lamp Assembly - 26120",
+                        details: "Exterior lamp.",
+                        images: ["Pic/26120_1.jpg"]
+                    },
+                    {
+                        code: "00201",
+                        name: "Lamp Assembly - 26125",
+                        details: "Additional lamp.",
+                        images: ["Pic/26125_1.jpg"]
+                    },
+                    {
+                        code: "06225",
+                        name: "Bumper Front - 62665",
+                        details: "Front bumper protection.",
+                        images: ["Pic/62665_1.jpg"]
+                    },
+                    {
+                        code: "00201",
+                        name: "Grille Assembly - 62320",
+                        details: "Front grille for airflow.",
+                        images: ["Pic/62320_1.jpg"]
+                    },
+                    {
+                        code: "00206",
+                        name: "Fender Assembly - 63040",
+                        details: "Wheel arch cover.",
+                        images: ["Pic/63040_1.jpg"]
+                    }
+                ],
+
+                "PAINT, PROTECTION, TIGHTNESS": [
+                    // {
+                    //     code: "41004",
+                    //     name: "PTO Unit",
+                    //     details: "Transfers engine power to equipment.",
+                    //     images: ["https://source.unsplash.com/600x400/?machine"]
+                    // }
+                ]
+            },
+
+            ELECTRICS: {
+
+                "LOCATION OF ELECTRICAL APPLIANCES": [
+                    {
+                        code: "TBD-ELE-001",
+                        name: "Air Pressure Switch",
+                        details: "Senses air pressure levels within the pneumatic system.",
+                        images: ["Pic/AirPressure_1.jpg"]
+                    },
+                    {
+                        code: "TBD-ELE-002",
+                        name: "Stop Lamp Switch",
+                        details: "Activates brake lights when the brake pedal is depressed.",
+                        images: ["Pic/StopLamp_1.jpg"]
+                    }
+                ],
+
+                "ELECTRIC POWER": [
+                    {
+                        code: "TBD-ELE-003",
+                        name: "Horn Assy",
+                        details: "Standard vehicle horn assembly for audible signaling.",
+                        images: ["Pic/Horn_1.jpg"]
+                    }
+                ],
+
+                "WORKPLACE": [
+                    // {
+                    //     code: "41003",
+                    //     name: "PTO Unit",
+                    //     details: "Transfers engine power to equipment.",
+                    //     images: ["https://source.unsplash.com/600x400/?machine"]
+                    // }
+                ],
+
+                "EXTERIOR AND INTERIOR LIGHTING": [
+                    {
+                        code: "TBD-ELE-004",
+                        name: "Head Light",
+                        details: "Primary forward-facing lighting unit.",
+                        images: ["Pic/HeadLight_1.jpg"]
+                    },
+                    {
+                        code: "TBD-ELE-005",
+                        name: "Reverse Light",
+                        details: "Illuminates area behind vehicle when in reverse gear.",
+                        images: ["Pic/ReverseLight_1.jpg"]
+                    },
+                    {
+                        code: "TBD-ELE-006",
+                        name: "Signal Light",
+                        details: "Indicators for turning and hazard warnings.",
+                        images: ["Pic/ParkinglLight_1.jpg"]
+                    },
+                    {
+                        code: "TBD-ELE-007",
+                        name: "Parking Light",
+                        details: "Low-intensity lights for parking visibility.",
+                        images: ["Pic/SignalLight_1.jpg"]
+                    }
+                ],
+
+                "ELEMENTS OF VISIBILITY AND COMFORT": [
+                    // {
+                    //     code: "41004",
+                    //     name: "PTO Unit",
+                    //     details: "Transfers engine power to equipment.",
+                    //     images: ["https://source.unsplash.com/600x400/?machine"]
+                    // }
+                ],
+
+                "OTHER ACCESSORIES": [
+                    {
+                        code: "TBD-ELE-008",
+                        name: "Back Buzzer",
+                        details: "Audible warning signal used when the vehicle is reversing.",
+                        images: ["Pic/BackBuzzer_1.jpg"]
+                    }
+                ]
+            },
+
+            FIXINGS: {
+
+                "Spare Parts": [
+                    // {
+                    //     code: "900",
+                    //     name: "Screw for Metals",
+                    //     details: "Screws designed for fastening metal components securely.",
+                    //     images: ["Pic/900_1.jpg", "Pic/900_2.jpg"]
+                    // },
+                    // {
+                    //     code: "901",
+                    //     name: "Metal Tubes",
+                    //     details: "Structural metal tubes used for support and assembly applications.",
+                    //     images: ["Pic/901_1.jpg", "Pic/901_2.jpg"]
+                    // }
+                ],
+            }
+        };
+        // FLATTEN PRODUCTS
+        let products = [];
+
+        Object.keys(catalog).forEach(cat => {
+            Object.keys(catalog[cat]).forEach(sub => {
+                catalog[cat][sub].forEach(p => {
+                    products.push({ ...p, cat, sub });
+                });
+            });
+        });
+
+        /* =======================
+           SIDEBAR MENU
+        ======================= */
+        const menu = document.getElementById("menu");
+
+        Object.keys(catalog).forEach(cat => {
+            let btn = document.createElement("button");
+            btn.className = "main-cat";
+            btn.innerText = cat;
+
+            let subMenu = document.createElement("div");
+            subMenu.className = "sub-menu";
+
+            Object.keys(catalog[cat]).forEach(sub => {
+                let subBtn = document.createElement("a");
+                subBtn.innerText = sub;
+
+                subBtn.onclick = () => {
+                    let list = [];
+                    catalog[cat][sub].forEach(p => list.push(p));
+                    render(list);
+                };
+
+                subMenu.appendChild(subBtn);
+            });
+
+            btn.onclick = () => btn.classList.toggle("active");
+
+            menu.appendChild(btn);
+            menu.appendChild(subMenu);
+        });
+
+        function render(list) {
+            grid.innerHTML = "";
+
+            list.forEach(p => {
+                grid.innerHTML += `
+<div class="product-card" onclick='openPanel(${JSON.stringify(p)})'>
+    <div class="product-img">
+        <img src="${p.images?.[0] || "https://source.unsplash.com/400x300/?engine"}">
+    </div>
+    <div class="product-info">
+        <h3>${p.code}</h3>
+        <p>${p.name}</p>
+    </div>
+</div>`;
+            });
+        }
+
+        /* =======================
+           PRODUCT GRID
+        ======================= */
+        const grid = document.getElementById("grid");
+
+        function render(list) {
+            grid.innerHTML = "";
+
+            list.forEach(p => {
+                grid.innerHTML += `
+<div class="product-card" onclick='openPanel(${JSON.stringify(p)})'>
+    <div class="product-img">
+        <img src="${p.images ? p.images[0] : "https://source.unsplash.com/400x300/?engine"}">
+    </div>
+    <div class="product-info">
+        <h3>${p.code}</h3>
+        <p>${p.name}</p>
+    </div>
+</div>`;
+            });
+        }
+        render(products);
+
+
+        /* =======================
+           SEARCH
+        ======================= */
+        document.getElementById("search").onkeyup = e => {
+            let v = e.target.value.toLowerCase();
+            render(products.filter(p =>
+                p.name.toLowerCase().includes(v) ||
+                p.code.includes(v)
+            ));
+        };
+
+
+        /* =======================
+           PANEL SYSTEM
+        ======================= */
+        let slideIndex = 0;
+        let currentProduct = null;
+
+        function openPanel(product) {
+            currentProduct = product;
+
+            overlay.style.display = "block";
+            panel.classList.add("active");
+
+            title.innerText = product.name;
+
+            desc.innerText = `
+Code: ${product.code}
+\n${product.details}
+`;
+
+            wa.href = `https://wa.me/94714421360?text=Inquiry about ${product.name} (${product.code})`;
+
+            // LOAD IMAGES
+            slides.innerHTML = product.images.map((img, i) =>
+                `<img class="slide ${i === 0 ? "active" : ""}" src="${img}">`
+            ).join("");
+
+            slideIndex = 0;
+        }
+
+
+        /* =======================
+           SLIDER
+        ======================= */
+        function changeSlide(n) {
+            let s = document.querySelectorAll(".slide");
+            if (!s.length) return;
+
+            s[slideIndex].classList.remove("active");
+            slideIndex = (slideIndex + n + s.length) % s.length;
+            s[slideIndex].classList.add("active");
+        }
+
+
+        /* =======================
+           CLOSE PANEL
+        ======================= */
+        overlay.onclick = () => {
+            overlay.style.display = "none";
+            panel.classList.remove("active");
+        };
+
+        const closeBtn = document.getElementById("closePanel");
+
+        closeBtn.onclick = () => {
+            overlay.style.display = "none";
+            panel.classList.remove("active");
+        };
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                overlay.style.display = "none";
+                panel.classList.remove("active");
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
